@@ -19,9 +19,9 @@ use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
 class ConcourseRateResource extends Resource
 {
-    protected static ?string $navigationGroup = 'Concourse Settings';
+    protected static ?string $navigationGroup = 'Unit Settings';
 
-    protected static ?string $navigationLabel = 'Rates';
+    protected static ?string $navigationLabel = 'Space Rates';
 
 
     protected static ?string $model = ConcourseRate::class;

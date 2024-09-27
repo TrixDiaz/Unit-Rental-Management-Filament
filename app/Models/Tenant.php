@@ -12,7 +12,6 @@ class Tenant extends Model
     protected $fillable = [
         'tenant_id',
         'concourse_id',
-        'space_id',
         'owner_id',
         'lease_start',
         'lease_end',
@@ -38,11 +37,6 @@ class Tenant extends Model
     public function concourse()
     {
         return $this->belongsTo(Concourse::class);
-    }
-
-    public function space()
-    {
-        return $this->belongsTo(Space::class);
     }
 
     public function owner()

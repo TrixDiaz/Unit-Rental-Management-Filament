@@ -16,12 +16,10 @@ return new class extends Migration
 
             $table->id();
             $table->string('name');
-            $table->string('address')->nullable();
-            $table->integer('spaces')->default(0);
+            $table->string('address')->nullable();  
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
             $table->string('image')->nullable();
-            $table->string('layout')->nullable();
             $table->integer('lease_term')->nullable();
             $table->boolean('is_active')->default(true);
             

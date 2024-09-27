@@ -19,7 +19,6 @@ class TenantSeeder extends Seeder
         Tenant::create([
             'tenant_id' => User::select('id')->inRandomOrder()->first()->id,
             'concourse_id' => Concourse::select('id')->inRandomOrder()->first()->id,
-            'space_id' => Space::select('id')->inRandomOrder()->first()->id,
             'owner_id' => User::select('id')->inRandomOrder()->first()->id,
             'lease_start' => now(),
             'lease_end' => now()->addYear(),

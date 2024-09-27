@@ -19,16 +19,6 @@ class EditConcourse extends EditRecord
     
     protected static string $resource = ConcourseResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\Action::make('viewSpaces')
-            ->label('View Layout')
-            ->url(fn () => $this->getResource()::getUrl('view-spaces', ['record' => $this->getRecord()]))
-            ->color('success'),
-            Actions\DeleteAction::make(),
-        ];
-    }
 
     protected function getSavedNotification(): ?Notification
     {

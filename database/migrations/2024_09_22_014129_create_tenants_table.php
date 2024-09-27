@@ -15,11 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('tenant_id');
             $table->unsignedBigInteger('concourse_id');
-            $table->unsignedBigInteger('space_id');
             $table->unsignedBigInteger('owner_id');
             $table->foreign('tenant_id')->references('id')->on('users');
             $table->foreign('concourse_id')->references('id')->on('concourses');
-            $table->foreign('space_id')->references('id')->on('spaces');
             $table->foreign('owner_id')->references('id')->on('users');
             $table->date('lease_start')->nullable();
             $table->date('lease_end')->nullable();

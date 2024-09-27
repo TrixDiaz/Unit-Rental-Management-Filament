@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('requirement_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('space_id')->constrained()->onDelete('cascade');
             $table->foreignId('application_id')->constrained()->onDelete('cascade');
             $table->foreignId('concourse_id')->constrained()->onDelete('cascade');
             $table->string('name');

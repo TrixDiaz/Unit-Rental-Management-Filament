@@ -20,9 +20,9 @@ use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
 class ConcourseResource extends Resource
 {
-    protected static ?string $navigationGroup = 'Concourse Settings';
+    protected static ?string $navigationGroup = 'Unit Settings';
 
-    protected static ?string $navigationLabel = 'Concourse';
+    protected static ?string $navigationLabel = 'Units';
 
     protected static ?string $model = Concourse::class;
 
@@ -66,12 +66,6 @@ class ConcourseResource extends Resource
                             Forms\Components\FileUpload::make('image')
                                 ->image()
                                 ->label('Concourse Image')
-                                ->imageEditor()
-                                ->openable()
-                                ->downloadable(),
-                            Forms\Components\FileUpload::make('layout')
-                                ->image()
-                                ->label('Space Layout')
                                 ->imageEditor()
                                 ->openable()
                                 ->downloadable(),
@@ -232,9 +226,6 @@ class ConcourseResource extends Resource
                     ->money('PHP')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('spaces')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -265,11 +256,6 @@ class ConcourseResource extends Resource
                     Tables\Actions\DeleteAction::make()->label('Archive'),
                     Tables\Actions\RestoreAction::make(),
                     Tables\Actions\ForceDeleteAction::make()->label('Permanent Delete'),
-                    Tables\Actions\Action::make('viewSpaces')
-                        ->label('View Layout')
-                        ->icon('heroicon-o-map')
-                        ->url(fn(Concourse $record): string => static::getUrl('view-spaces', ['record' => $record]))
-                        ->color('success'),
                 ])
                     ->icon('heroicon-m-ellipsis-vertical')
                     ->tooltip('Actions')

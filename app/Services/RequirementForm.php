@@ -1,22 +1,11 @@
-<?php
-
-namespace App\Services;
-
-use App\Models\Requirement;
-use Filament\Forms;
-use Illuminate\Support\Facades\Auth;
-
-final class RequirementForm
-{
-    public static function schema($concourseId = null, $spaceId = null, $concourseLeaseTerm = null): array
+ $concourseLeaseTerm = null): array
     {
         $user = Auth::user();
 
         return [
             Forms\Components\Hidden::make('user_id')
                 ->default(fn() => $user->id),
-            Forms\Components\Hidden::make('space_id')
-                ->default($spaceId),
+            
             Forms\Components\Hidden::make('concourse_id')
                 ->default($concourseId),
             Forms\Components\Hidden::make('status')
@@ -48,7 +37,7 @@ final class RequirementForm
                         ->options([
                             'food' => 'Food',
                             'non-food' => 'Non Food',
-                            'other' => 'Other',
+                            'other' => 'Ot
                         ])
                         ->required()
                         ->native(false),

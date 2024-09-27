@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('applications', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('concourse_id');
-            $table->unsignedBigInteger('space_id');
             $table->id();
             $table->string('business_name')->nullable();
             $table->string('owner_name')->nullable();
@@ -27,7 +26,6 @@ return new class extends Migration
             $table->string('remarks')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('concourse_id')->references('id')->on('concourses')->onDelete('cascade');
-            $table->foreign('space_id')->references('id')->on('spaces')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

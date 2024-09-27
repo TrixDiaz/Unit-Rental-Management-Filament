@@ -38,12 +38,6 @@ class ApplicationResource extends Resource
                                 ->searchable()
                                 ->preload()
                                 ->disabledOn('edit'),
-                            Forms\Components\Select::make('space_id')
-                                ->relationship('space', 'name')
-                                ->required()
-                                ->searchable()
-                                ->preload()
-                                ->disabledOn('edit'),
                             Forms\Components\Select::make('user_id')
                                 ->relationship('user', 'name')
                                 ->required()

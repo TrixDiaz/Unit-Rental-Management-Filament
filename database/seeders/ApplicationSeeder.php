@@ -19,7 +19,6 @@ class ApplicationSeeder extends Seeder
         Application::create([
             'user_id' => User::select('id')->inRandomOrder()->first()->id,
             'concourse_id' => Concourse::select('id')->inRandomOrder()->first()->id,
-            'space_id' => Space::select('id')->inRandomOrder()->first()->id,
             'status' => 'available',
             'business_name' => 'Business 1',
             'owner_name' => 'Owner 1',

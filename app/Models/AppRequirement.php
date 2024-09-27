@@ -12,18 +12,12 @@ class AppRequirement extends Model
     protected $fillable = [
         'requirement_id',
         'user_id',
-        'space_id',
         'concourse_id',
         'application_id',
         'name',
         'status',
         'file',
     ];
-
-    public function application()
-    {
-        return $this->belongsTo(Application::class);
-    }
 
     public function requirement()
     {

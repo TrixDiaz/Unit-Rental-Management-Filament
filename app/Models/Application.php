@@ -12,7 +12,6 @@ class Application extends Model
 
     protected $fillable = [
         'user_id',
-        'space_id',
         'concourse_id',
         'business_name',
         'owner_name',
@@ -28,11 +27,6 @@ class Application extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function space()
-    {
-        return $this->belongsTo(Space::class);
     }
 
     public function concourse()
