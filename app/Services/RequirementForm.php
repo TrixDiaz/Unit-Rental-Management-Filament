@@ -1,11 +1,20 @@
- $concourseLeaseTerm = null): array
+<?php
+
+namespace App\Services;
+
+use App\Models\Requirement;
+use Filament\Forms;
+use Illuminate\Support\Facades\Auth;
+
+final class RequirementForm
+{
+    public static function schema($concourseId = null, $spaceId = null, $concourseLeaseTerm = null): array
     {
         $user = Auth::user();
 
         return [
             Forms\Components\Hidden::make('user_id')
                 ->default(fn() => $user->id),
-            
             Forms\Components\Hidden::make('concourse_id')
                 ->default($concourseId),
             Forms\Components\Hidden::make('status')
@@ -37,15 +46,10 @@
                         ->options([
                             'food' => 'Food',
                             'non-food' => 'Non Food',
-                            'other' => 'Ot
+                            'other' => 'Other',
                         ])
                         ->required()
                         ->native(false),
-                    Forms\Components\TextInput::make('concourse_lease_term')
-                        ->label('Concourse Lease Term')
-                        ->default($concourseLeaseTerm)
-                        ->suffix('Months')
-                        ->readOnly(),
                 ])
                 ->columns(2),
 
