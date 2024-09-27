@@ -17,6 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('address')->nullable();  
+            $table->integer('unit_number')->nullable();
+            $table->integer('deposit')->nullable();
+            $table->string('status')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
             $table->string('image')->nullable();

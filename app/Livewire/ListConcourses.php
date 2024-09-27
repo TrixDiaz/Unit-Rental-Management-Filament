@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Columns\TextColumn;
 
 class ListConcourses extends Component implements HasTable, HasForms
 {
@@ -28,55 +29,48 @@ class ListConcourses extends Component implements HasTable, HasForms
         return $table
             ->query(Concourse::query()->where('is_active', true))
             ->contentGrid([
-                'md' => 2,
-                'lg' => 3,
+                'md' => 3,
+                'lg' => 4,
             ])
             ->columns([
                 Tables\Columns\Layout\Stack::make([
                     Tables\Columns\ImageColumn::make('image')
                         ->width('100%')
-                        ->height('100%')
+                        ->height('200px')
                         ->defaultImageUrl(
                             fn($record) =>
                             $record->image === null
-                                ? 'https://placehold.co/600x250?text=No+Image'
+                                ? 'https://placehold.co/600x400'
                                 : null
                         ),
                     Tables\Columns\TextColumn::make('name')
-                        ->weight('bold')
+                        ->size(TextColumn\TextColumnSize::Large)
                         ->sortable()
                         ->searchable(),
-                    Tables\Columns\TextColumn::make('address')
-                        ->color('gray'),
-                    Tables\Columns\TextColumn::make('spaces_count')
-                        ->counts('spaces')
+                    Tables\Columns\TextColumn::make('status')
+                        ->badge()
                         ->sortable()
-                        ->prefix('Spaces: ')
-                        ->label('Spaces'),
+                        ->extraAttributes(['class' => 'capitalize']),
+                    Tables\Columns\TextColumn::make('address'),
                     Tables\Columns\TextColumn::make('created_at')
                         ->dateTime('F j, Y')
                         ->color('gray')
                         ->toggleable(isToggledHiddenByDefault: true),
                 ]),
             ])
-            ->filters([])
-            ->actions([
-                Tables\Actions\Action::make('view_spaces')
-                    ->label('View Spaces')
-                    ->icon('heroicon-o-rectangle-stack')
-                    ->url(fn($record) => route('filament.app.pages.list-space-table', ['concourse_id' => $record->id]))
-                    ->openUrlInNewTab(),
-                // Tables\Actions\ViewAction::make(),
-                // Tables\Actions\EditAction::make(),
-                // Tables\Actions\DeleteAction::make(),
+            ->filters([
+                SelectFilter::make('status')
+                    ->options([
+                        'Available' => 'Available',
+                        'Occupied' => 'Occupied',
+                    ]),
             ])
-            ->headerActions([
-                // Tables\Actions\CreateAction::make()
-                //     ->model(Concourse::class)
-                //     ->form([
-                //         \Filament\Forms\Components\TextInput::make('name')
-                //             ->required(),
-                //     ]),
-            ]);
+            ->actions([
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\Action::make('ret')
+                    ->label('Rent')
+                    ->icon('heroicon-o-rectangle-stack'),
+            ])
+        ;
     }
 }

@@ -21,7 +21,7 @@ class ConcourseRateResource extends Resource
 {
     protected static ?string $navigationGroup = 'Unit Settings';
 
-    protected static ?string $navigationLabel = 'Space Rates';
+    protected static ?string $navigationLabel = 'Unit Rates';
 
 
     protected static ?string $model = ConcourseRate::class;

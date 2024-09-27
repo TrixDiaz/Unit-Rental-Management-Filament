@@ -69,7 +69,7 @@ class ConcourseResource extends Resource
                                 ->imageEditor()
                                 ->openable()
                                 ->downloadable(),
-                        ])->columns(2),
+                        ])->columnSpanFull(),
 
                     ])->columnSpan([
                         'sm' => 3,
@@ -208,13 +208,6 @@ class ConcourseResource extends Resource
                     ->height(150)
                     ->label('Concourse Image')
                     ->defaultImageUrl(fn($record) => $record->image === null ? asset('https://placehold.co/600x800') : null),
-                Tables\Columns\ImageColumn::make('layout')
-                    ->square()
-                    ->width(150)
-                    ->height(150)
-                    ->label('Space Layout')
-                    ->defaultImageUrl(fn($record) => $record->layout === null ? asset('https://placehold.co/600x800') : null)
-                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('name')
                     ->sortable()
                     ->searchable(),
@@ -284,7 +277,6 @@ class ConcourseResource extends Resource
             'index' => Pages\ListConcourses::route('/'),
             'create' => Pages\CreateConcourse::route('/create'),
             'edit' => Pages\EditConcourse::route('/{record}/edit'),
-            'view-spaces' => Pages\ViewSpaceConcourses::route('/{record}/spaces'),
         ];
     }
 

@@ -26,10 +26,6 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         return true;
     }
 
-    public function spaces()
-    {
-        return $this->hasMany(Space::class, 'user_id');
-    }
 
     /**
      * The attributes that are mass assignable.
