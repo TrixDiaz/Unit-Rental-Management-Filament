@@ -86,19 +86,25 @@ class TenantSpace extends Page implements HasForms, HasTable
     protected function payWithGCash($record)
     {
         $total = $record->monthly_payment;
+        $billRecord = $record->bills;
+
+        $lineItems = [];
+
+        foreach ($billRecord as $bill) {
+            $lineItems[] = [
+                'currency' => 'PHP',
+                'amount' => $bill['amount'] * 100,
+                'description' => $bill['name'],
+                'name' => $bill['name'],
+                'quantity' => 1,
+            ];
+        }
 
         $data = [
             'data' => [
                 'attributes' => [
-                    'line_items' => [
-                        [
-                            'currency' => 'PHP',
-                            'amount' => $total * 100,
-                            'description' => 'Monthly rent payment',
-                            'name' => 'Rent for ' . $record->concourse->name,
-                            'quantity' => 1,
-                        ],
-                    ],
+                    'line_items' => $lineItems,
+                    'amount_total' => $total * 100,
                     'payment_method_types' => ['gcash'],
                     'success_url' => route('welcome'),
                     'cancel_url' => route('welcome'),
