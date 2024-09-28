@@ -52,7 +52,7 @@ class TenantResource extends Resource
                                 ->preload()
                                 ->required()
                                 ->disabled(),
-                        ])->columns(2),
+                        ])->columns(3),
                     Forms\Components\Section::make('Bills Utility')->description('Add the utility bills for the tenant')->schema([
                         Repeater::make('bills')
                             ->schema([
@@ -96,7 +96,7 @@ class TenantResource extends Resource
                                 'overdue' => 'Overdue',
                                 'pending' => 'Pending',
                             ]),
-                            Forms\Components\Select::make('payment_status')
+                        Forms\Components\Select::make('payment_status')
                             ->label('Payment Status')
                             ->native(false)
                             ->options([
@@ -266,16 +266,16 @@ class TenantResource extends Resource
                     ->extraAttributes(['class' => 'capitalize'])
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
-                Tables\Columns\TextColumn::make('bills')
-                    ->label('Bills')
-                    ->prefix('₱')
-                    ->numeric()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('monthly_payment')
                     ->label('Monthly Payment')
                     ->prefix('₱')
                     ->numeric()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false),
+                Tables\Columns\TextColumn::make('payment_status')
+                    ->label('Payment Status')
+                    ->extraAttributes(['class' => 'capitalize'])
+                    ->badge()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('created_at')
