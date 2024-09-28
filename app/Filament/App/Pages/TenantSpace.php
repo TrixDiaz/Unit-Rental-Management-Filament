@@ -148,7 +148,7 @@ class TenantSpace extends Page implements HasForms, HasTable
 
     protected function sendPaymentConfirmationEmail($tenant)
     {
-        $user = User::find($tenant->tenant_id);
+        $user = $tenant->tenant;
         
         if ($user) {
             Mail::to($user->email)->send(new PaymentConfirmation($tenant, $user));
@@ -157,6 +157,9 @@ class TenantSpace extends Page implements HasForms, HasTable
 
     public function handlePaymentSuccess($recordId)
     {
+        $tenant = Tenant::findOrFail($recordId);
+        $this->sendPaymentConfirmationEmail($tenant);
+        
         $tenant = Tenant::findOrFail($recordId);
         $tenant->bills = [];
         $tenant->monthly_payment = 0;
@@ -171,7 +174,6 @@ class TenantSpace extends Page implements HasForms, HasTable
             'payment_status' => 'Completed',
         ]);
 
-        $this->sendPaymentConfirmationEmail($tenant);
 
         $this->notify('success', 'Payment Successful', 'Your payment has been processed successfully.');
         return redirect()->route('filament.app.pages.tenant-space');

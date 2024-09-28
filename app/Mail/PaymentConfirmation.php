@@ -1,11 +1,9 @@
- <?php
+<?php
 
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Tenant;
@@ -18,6 +16,9 @@ class PaymentConfirmation extends Mailable
     public $tenant;
     public $user;
 
+    /**
+     * Create a new message instance.
+     */
     public function __construct(Tenant $tenant, User $user)
     {
         $this->tenant = $tenant;
@@ -37,11 +38,17 @@ class PaymentConfirmation extends Mailable
     /**
      * Get the message content definition.
      */
-    public function content(): Content
+    // public function content(): Content
+    // {
+    //     return new Content(
+    //         view: 'emails.payment-confirmation',
+    //     );
+    // }
+
+    public function build()
     {
-        return new Content(
-            view: 'emails.payment-confirmation',
-        );
+        return $this->view('emails.payment-confirmation');
+        // You can customize the view file and subject as needed
     }
 
     /**

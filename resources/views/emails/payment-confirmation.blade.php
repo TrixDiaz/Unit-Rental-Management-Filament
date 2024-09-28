@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment Confirmation</title>
 </head>
 <body>
     <h1>Payment Confirmation</h1>
     <p>Dear {{ $user->name }},</p>
-    <p>We are pleased to confirm that your payment has been successfully processed.</p>
-    <p>Payment details:</p>
+    <p>Your payment for the tenant space has been successfully processed.</p>
+    <p>Details:</p>
     <ul>
         <li>Concourse: {{ $tenant->concourse->name }}</li>
-        <li>Amount: ₱{{ number_format($tenant->monthly_payment, 2) }}</li>
-        <li>Date: {{ now()->format('F j, Y') }}</li>
+        <li>Amount Paid: ₱{{ number_format($tenant->monthly_payment, 2) }}</li>
+        <li>Payment Status: {{ $tenant->payment_status }}</li>
     </ul>
-    <p>Thank you for your prompt payment.</p>
-    <p>Best regards,<br>Your Property Management Team</p>
+    <p>Thank you for your payment.</p>
 </body>
 </html>
