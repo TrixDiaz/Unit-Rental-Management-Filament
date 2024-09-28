@@ -5,19 +5,16 @@ namespace App\Livewire;
 use App\Models\Concourse;
 use App\Models\User;
 use App\Services\RequirementForm;
-use Filament\Actions\Action;
-use Filament\Forms\Components\TextInput;
 use Livewire\Component;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
+use Filament\Notifications\Actions\Action;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Filters\TrashedFilter;
-use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Support\Facades\Auth;
 
@@ -63,6 +60,14 @@ class ListConcourses extends Component implements HasTable, HasForms
                         ->badge()
                         ->sortable()
                         ->extraAttributes(['class' => 'capitalize']),
+                    Tables\Columns\TextColumn::make('concourseRate.price')
+                        ->prefix('Monthly Rent ')
+                        ->sortable()
+                        ->money('PHP'),
+                    Tables\Columns\TextColumn::make('deposit')
+                        ->prefix('Deposit ')
+                        ->sortable()
+                        ->money('PHP'),
                     Tables\Columns\TextColumn::make('address'),
                     Tables\Columns\TextColumn::make('created_at')
                         ->dateTime('F j, Y')
@@ -84,73 +89,23 @@ class ListConcourses extends Component implements HasTable, HasForms
                     ->slideOver()
                     ->icon('heroicon-o-plus')
                     ->form(function ($record) {
-                        return RequirementForm::schema($this->concourseId);
+                        return RequirementForm::schema($record->id, $record->lease_term);
                     })
                     ->using(function (array $data, $record) {
                         // Create the application
                         $application = \App\Models\Application::create([
                             ...$data,
                             'user_id' => Auth::id(),
-                            'concourse_id' => $this->concourseId,
+                            'concourse_id' => $record->id, // Change this line
                             'status' => 'pending',
+                            'lease_term' => $record->lease_term, // Add this line
                         ]);
 
-                        // Store the uploaded requirements
-                        if (isset($data['requirements'])) {
-                            foreach ($data['requirements'] as $requirementId => $file) {
-                                if ($file) {
-                                    \App\Models\AppRequirement::create([
-                                        'requirement_id' => $requirementId,
-                                        'user_id' => Auth::id(),
-                                        'space_id' => $record->id,
-                                        'name' => \App\Models\Requirement::find($requirementId)->name,
-                                        'status' => 'pending',
-                                        'file' => $file,
-                                    ]);
-                                }
-                            }
-                        }
+                        // Notify the user
+                        $this->notifyUser('Application Submitted', 'Your application has been submitted.');
 
-                        if ($record) {
-                            $record->update([
-                                'user_id' => Auth::id(),
-                                'status' => 'pending'
-                            ]);
-                        }
-
-                        Notification::make()
-                            ->title('Application Submitted')
-                            ->body('Your application has been submitted.')
-                            ->icon('heroicon-o-document-text')
-                            ->actions([
-                                Action::make('markAsRead')
-                                    ->label('Mark as read')
-                                    ->button()
-                                    ->markAsRead(),
-                                Action::make('delete')
-                                    ->label('Delete')
-                                    ->color('danger')
-                                    ->icon('heroicon-o-trash')
-                                    ->action(fn(Notification $notification) => $notification->delete())
-                            ])
-                            ->sendToDatabase(Auth::user());
-
-                        Notification::make()
-                            ->title('New Application')
-                            ->body('A new application has been submitted.')
-                            ->icon('heroicon-o-document-text')
-                            ->actions([
-                                Action::make('markAsRead')
-                                    ->label('mark as read')
-                                    ->button()
-                                    ->markAsRead(),
-                                Action::make('delete')
-                                    ->label('Delete')
-                                    ->color('danger')
-                                    ->icon('heroicon-o-trash')
-                                    ->action(fn(Notification $notification) => $notification->delete())
-                            ])
-                            ->sendToDatabase(User::find(1));
+                        // Notify the admin
+                        $this->notifyAdmin('New Application', 'A new application has been submitted.');
 
                         return $application;
                     })
@@ -162,11 +117,51 @@ class ListConcourses extends Component implements HasTable, HasForms
 
                         // Hide if user already has an application for this space
                         return \App\Models\Application::where('user_id', Auth::id())
-                            ->where('concourse_id', $this->concourseId)
+                            ->where('concourse_id', $record->id) // Change this line
                             ->exists();
                     }),
-
+                Tables\Actions\Action::make('Check Application')
+                    ->link()
+                    ->icon('heroicon-o-pencil')
+                    ->url(fn($record) => route('filament.app.pages.edit-requirement', ['concourse_id' => $record->id, 'user_id' => Auth::id()]))
+                    ->openUrlInNewTab()
+                    ->visible(function ($record) {
+                        return \App\Models\Application::where('user_id', Auth::id())
+                            ->where('concourse_id', $record->id)
+                            ->where('status', 'pending')
+                            ->exists();
+                    }),
             ])
         ;
+    }
+
+    public function notifyUser(string $title, string $body): void
+    {
+        Notification::make()
+            ->title($title)
+            ->body($body)
+            ->icon('heroicon-o-document-text')
+            ->actions([
+                Action::make('markAsRead')
+                    ->label('Mark as read')
+                    ->button()
+                    ->markAsRead(),
+            ])
+            ->sendToDatabase(Auth::user());
+    }
+
+    public function notifyAdmin(string $title, string $body): void
+    {
+        Notification::make()
+            ->title($title)
+            ->body($body)
+            ->icon('heroicon-o-document-text')
+            ->actions([
+                Action::make('markAsRead')
+                    ->label('Mark as read')
+                    ->button()
+                    ->markAsRead(),
+            ])
+            ->sendToDatabase(User::find(1));
     }
 }

@@ -20,8 +20,7 @@ class Application extends Model
         'address',
         'status',
         'remarks',
-        'business_type',
-        'concourse_lease_term',
+        'lease_term',
     ];
 
     public function user()

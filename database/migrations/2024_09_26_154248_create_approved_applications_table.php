@@ -13,17 +13,14 @@ return new class extends Migration
     {
         Schema::create('approved_applications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('concourse_id')->constrained();
-            $table->string('business_name');
-            $table->string('owner_name');
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('concourse_id')->constrained('concourses');
             $table->string('email');
             $table->string('phone_number');
             $table->text('address');
             $table->string('status');
             $table->text('remarks')->nullable();
-            $table->string('business_type')->nullable();
-            $table->string('concourse_lease_term');
+            $table->string('lease_term');
             $table->timestamps();
         });
     }

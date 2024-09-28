@@ -3,8 +3,6 @@
 namespace App\Filament\Admin\Resources\ConcourseResource\Pages;
 
 use App\Filament\Admin\Resources\ConcourseResource;
-use App\Models\Concourse;
-use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Notifications\Notification;
 use Filament\Notifications\Actions\Action;

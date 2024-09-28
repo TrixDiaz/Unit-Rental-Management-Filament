@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 final class RequirementForm
 {
-    public static function schema($concourseId = null, $spaceId = null, $concourseLeaseTerm = null): array
+    public static function schema($concourseId = null, $concourseLeaseTerm = null): array
     {
         $user = Auth::user();
 
@@ -16,42 +16,36 @@ final class RequirementForm
             Forms\Components\Hidden::make('user_id')
                 ->default(fn() => $user->id),
             Forms\Components\Hidden::make('concourse_id')
-                ->default($concourseId),
+                ->default($concourseId)
+                ->required(), // Add this line
             Forms\Components\Hidden::make('status')
                 ->default('pending'),
-            Forms\Components\Section::make('Business Information')
+            Forms\Components\Section::make('Tenant Information')
                 ->schema([
-                    Forms\Components\TextInput::make('business_name')
-                        ->label('Business Name')
-                        ->required(),
-                    Forms\Components\TextInput::make('owner_name')
-                        ->label('Owner Name')
-                        ->required(),
-                    Forms\Components\TextInput::make('email')
-                        ->label('Email')
-                        ->email()
-                        ->default(fn() => $user->email)
-                        ->readOnly(),
-                    Forms\Components\TextInput::make('phone_number')
-                        ->label('Phone Number')
-                        ->default(fn() => $user->phone_number)
-                        ->required(),
-                    Forms\Components\TextInput::make('address')
+                    Forms\Components\Grid::make(3)->schema([
+                        Forms\Components\TextInput::make('email')
+                            ->label('Email')
+                            ->email()
+                            ->default(fn() => $user->email)
+                            ->readOnly(),
+                        Forms\Components\TextInput::make('phone_number')
+                            ->label('Phone Number')
+                            ->default(fn() => $user->phone_number)
+                            ->required(),
+
+                        Forms\Components\TextInput::make('lease_term')
+                            ->label('Lease Term')
+                            ->default($concourseLeaseTerm)
+                            ->readOnly()
+                            ->suffix('Months'),
+                    ]),
+                    Forms\Components\Textarea::make('address')
                         ->label('Permanent Address')
                         ->default(fn() => $user->address)
-                        ->columnSpanFull()
-                        ->required(),
-                    Forms\Components\Select::make('business_type')
-                        ->label('Business Type')
-                        ->options([
-                            'food' => 'Food',
-                            'non-food' => 'Non Food',
-                            'other' => 'Other',
-                        ])
                         ->required()
-                        ->native(false),
+                        ->columnSpanFull(),
                 ])
-                ->columns(2),
+                ->columns(),
 
             Forms\Components\Section::make('Requirements')
                 ->schema(function () {
@@ -63,7 +57,7 @@ final class RequirementForm
                             ->directory('requirements')
                             ->acceptedFileTypes(['application/pdf', 'image/*'])
                             ->maxSize(5120) // 5MB max file size
-                        ;
+                            ;
                     })->toArray();
                 })
                 ->columns(2),

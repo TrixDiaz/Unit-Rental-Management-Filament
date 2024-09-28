@@ -15,14 +15,11 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('concourse_id');
             $table->id();
-            $table->string('business_name')->nullable();
-            $table->string('owner_name')->nullable();
             $table->string('address')->nullable();
             $table->string('phone_number')->nullable();
             $table->string('email')->nullable();
-            $table->string('business_type')->nullable();
             $table->string('status')->default('pending');
-            $table->integer('concourse_lease_term')->nullable();
+            $table->integer('lease_term')->nullable();
             $table->string('remarks')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('concourse_id')->references('id')->on('concourses')->onDelete('cascade');

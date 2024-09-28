@@ -45,18 +45,14 @@ class ApplicationResource extends Resource
                                 ->preload()
                                 ->label('Tenant')
                                 ->disabledOn('edit'),
-                            Forms\Components\TextInput::make('business_name')
-                                ->maxLength(255)
-                                ->default(null),
-                            Forms\Components\TextInput::make('owner_name')
-                                ->maxLength(255)
-                                ->default(null),
+                         
                             Forms\Components\TextInput::make('email')
                                 ->email()
+                                ->disabled()
                                 ->maxLength(255)
                                 ->default(null),
                         ])->columns(3),
-                        Forms\Components\TextInput::make('address')
+                        Forms\Components\Textarea::make('address')
                             ->maxLength(255)
                             ->default(null)
                             ->columnSpanFull(),
@@ -64,16 +60,7 @@ class ApplicationResource extends Resource
                             ->tel()
                             ->maxLength(255)
                             ->default(null),
-                        Forms\Components\Select::make('business_type')
-                            ->label('Business Type')
-                            ->extraInputAttributes(['class' => 'capitalize'])
-                            ->options([
-                                'food' => 'Food',
-                                'non-food' => 'Non Food',
-                                'other' => 'Other',
-                            ])
-                            ->native(false),
-                        Forms\Components\TextInput::make('concourse_lease_term')
+                        Forms\Components\TextInput::make('lease_term')
                             ->label('Concourse Lease Term')
                             ->disabled()
                             ->suffix('Months'),
@@ -85,11 +72,11 @@ class ApplicationResource extends Resource
                             ])
                             ->native(false)
                             ->extraInputAttributes(['class' => 'capitalize']),
-                        Forms\Components\TextInput::make('remarks')
+                        Forms\Components\Textarea::make('remarks')
                             ->maxLength(255)
                             ->default(null)
                             ->columnSpanFull(),
-                    ])->columns(2),
+                    ])->columns(3),
                 Forms\Components\Section::make('List of Required Documents')
                     ->description('Approved each documents for the application')
                     ->schema([
@@ -131,14 +118,6 @@ class ApplicationResource extends Resource
                     ->label('Tenant'),
                 Tables\Columns\TextColumn::make('concourse.name')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('space.name')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('business_name')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('owner_name')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('address')
                     ->searchable()
                     ->limit(20)
@@ -149,16 +128,14 @@ class ApplicationResource extends Resource
                 Tables\Columns\TextColumn::make('email')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('business_type')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('concourse_lease_term')
+                
+                Tables\Columns\TextColumn::make('lease_term')
                     ->label('Due Date')
                     ->date()
                     ->sortable()
                     ->getStateUsing(function ($record) {
-                        if ($record->concourse_lease_term) {
-                            return $record->created_at->addMonths($record->concourse_lease_term);
+                        if ($record->lease_term) {
+                            return $record->created_at->addMonths($record->lease_term);
                         }
                         return null;
                     }),

@@ -28,16 +28,14 @@ class EditRequirement extends Page implements Forms\Contracts\HasForms
     public function mount(): void
     {
         $concourseId = request()->query('concourse_id');
-        $spaceId = request()->query('space_id');
         $userId = Auth::id();
 
         $this->application = Application::where('concourse_id', $concourseId)
-            ->where('space_id', $spaceId)
             ->where('user_id', $userId)
             ->firstOrFail();
 
         $this->appRequirements = AppRequirement::where('application_id', $this->application->id)->get();
-        
+
         // Fetch all requirements for the concourse
         // Adjust this query based on your actual database structure
         $this->allRequirements = Requirement::all();
@@ -57,10 +55,6 @@ class EditRequirement extends Page implements Forms\Contracts\HasForms
             ->schema([
                 Forms\Components\Section::make('Business Information')
                     ->schema([
-                        Forms\Components\TextInput::make('business_name')
-                            ->label('Business Name'),
-                        Forms\Components\TextInput::make('owner_name')
-                            ->label('Owner Name'),
                         Forms\Components\TextInput::make('email')
                             ->label('Email')
                             ->email()
@@ -70,24 +64,18 @@ class EditRequirement extends Page implements Forms\Contracts\HasForms
                             ->label('Phone Number')
                             ->default(fn() => $this->application->phone_number)
                             ->disabled(),
-                        Forms\Components\TextInput::make('address')
-                            ->label('Permanent Address')
-                            ->default(fn() => $this->application->address)
-                            ->columnSpanFull(),
-                        Forms\Components\Select::make('business_type')
-                            ->label('Business Type')
-                            ->options([
-                                'food' => 'Food',
-                                'non-food' => 'Non Food',
-                                'other' => 'Other',
-                            ])
-                            ->native(false),
-                        Forms\Components\TextInput::make('concourse_lease_term')
+                        Forms\Components\TextInput::make('lease_term')
                             ->label('Lease Agreement Date')
                             ->disabled()
                             ->suffix('Months'),
-                        Forms\Components\TextInput::make('remarks')
+                        Forms\Components\Textarea::make('address')
+                            ->label('Permanent Address')
+                            ->default(fn() => $this->application->address)
+                            ->columnSpanFull(),
+
+                        Forms\Components\Textarea::make('remarks')
                             ->label('Remarks')
+                            ->disabled()
                             ->columnSpanFull(),
                         Forms\Components\Section::make('Requirements')
                             ->schema(function () {
@@ -109,7 +97,7 @@ class EditRequirement extends Page implements Forms\Contracts\HasForms
                             })
                             ->columns(2),
                     ])
-                    ->columns(2),
+                    ->columns(3),
             ])
             ->statePath('data');
     }
@@ -156,6 +144,6 @@ class EditRequirement extends Page implements Forms\Contracts\HasForms
         Notification::make()
             ->success()
             ->title('Application updated successfully')
-            ->sendToDatabase(Auth::user(), );
+            ->sendToDatabase(Auth::user(),);
     }
 }
