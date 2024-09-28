@@ -96,6 +96,15 @@ class TenantResource extends Resource
                                 'overdue' => 'Overdue',
                                 'pending' => 'Pending',
                             ]),
+                            Forms\Components\Select::make('payment_status')
+                            ->label('Payment Status')
+                            ->native(false)
+                            ->options([
+                                'paid' => 'Paid',
+                                'unpaid' => 'Unpaid',
+                                'overdue' => 'Overdue',
+                                'pending' => 'Pending',
+                            ]),
                     ]),
                     Forms\Components\Section::make('Visibility')->schema([
                         Forms\Components\Toggle::make('is_active')
@@ -257,11 +266,18 @@ class TenantResource extends Resource
                     ->extraAttributes(['class' => 'capitalize'])
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
-                Tables\Columns\ToggleColumn::make('is_active')
-                    ->label('Active')
-                    ->onIcon('heroicon-m-bolt')
-                    ->offIcon('heroicon-m-bolt-slash')
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('bills')
+                    ->label('Bills')
+                    ->prefix('₱')
+                    ->numeric()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false),
+                Tables\Columns\TextColumn::make('monthly_payment')
+                    ->label('Monthly Payment')
+                    ->prefix('₱')
+                    ->numeric()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('F j, Y H:i')
                     ->sortable()
