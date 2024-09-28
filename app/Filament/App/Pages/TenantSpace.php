@@ -17,7 +17,11 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
-use Ixudra\Curl\Facades\Curl;    
+use Ixudra\Curl\Facades\Curl;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PaymentConfirmation;
+use App\Models\User;
+use App\Models\Payment;
 
 class TenantSpace extends Page implements HasForms, HasTable
 {
@@ -142,6 +146,15 @@ class TenantSpace extends Page implements HasForms, HasTable
             ->send();
     }
 
+    protected function sendPaymentConfirmationEmail($tenant)
+    {
+        $user = User::find($tenant->tenant_id);
+        
+        if ($user) {
+            Mail::to($user->email)->send(new PaymentConfirmation($tenant, $user));
+        }
+    }
+
     public function handlePaymentSuccess($recordId)
     {
         $tenant = Tenant::findOrFail($recordId);
@@ -149,6 +162,16 @@ class TenantSpace extends Page implements HasForms, HasTable
         $tenant->monthly_payment = 0;
         $tenant->payment_status = 'Paid';
         $tenant->save();
+
+        // Create a new Payment record
+        Payment::create([
+            'tenant_id' => $tenant->id,
+            'payment_type' => 'Monthly Rent',
+            'payment_method' => 'GCash',
+            'payment_status' => 'Completed',
+        ]);
+
+        $this->sendPaymentConfirmationEmail($tenant);
 
         $this->notify('success', 'Payment Successful', 'Your payment has been processed successfully.');
         return redirect()->route('filament.app.pages.tenant-space');
