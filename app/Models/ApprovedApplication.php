@@ -20,6 +20,6 @@ class ApprovedApplication extends Model
         'address',
         'status',
         'remarks',
-        'concourse_lease_term',
+        'lease_term',
     ];
 }

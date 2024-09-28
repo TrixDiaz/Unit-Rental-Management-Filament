@@ -13,6 +13,7 @@ use App\Models\ApprovedApplication;
 use App\Models\Tenant;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon; // Add this import
 
 class EditApplication extends EditRecord
 {
@@ -36,11 +37,7 @@ class EditApplication extends EditRecord
                         // Store the application data in ApprovedApplication table
                         ApprovedApplication::create($application->toArray());
 
-                        // Update space status
-                        $space = Space::find($application->space_id);
-                        if ($space) {
-                            $space->update(['status' => 'approved']);
-                        }
+                     
 
                         // Delete the application from the Application table
                         $application->delete();
@@ -70,11 +67,10 @@ class EditApplication extends EditRecord
                         $tenant = Tenant::create([
                             'tenant_id' => $application->user_id,
                             'concourse_id' => $application->concourse_id,
-                            'space_id' => $application->space_id,
-                            'owner_id' => auth()->user()->id,
+                            'owner_id' => $application->user_id,
                             'lease_start' => $application->created_at,
-                            'lease_end' => $application->lease_end,
-                            'lease_term' => $application->concourse_lease_term,
+                            'lease_end' => Carbon::parse($application->created_at)->addMonths($application->lease_term),
+                            'lease_term' => $application->lease_term,
                             'lease_status' => 'active',
                             'bills' => $application->bills ? json_encode($application->bills) : null,
                             'monthly_payment' => $application->monthly_payment ? $application->monthly_payment : null,

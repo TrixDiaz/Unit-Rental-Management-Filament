@@ -46,12 +46,6 @@ class TenantResource extends Resource
                                 ->preload()
                                 ->required()
                                 ->disabled(),
-                            Forms\Components\Select::make('space_id')
-                                ->relationship('space', 'name')
-                                ->label('Space')
-                                ->preload()
-                                ->required()
-                                ->disabled(),
                             Forms\Components\Select::make('owner_id')
                                 ->relationship('owner', 'name')
                                 ->label('Owner')
@@ -234,11 +228,7 @@ class TenantResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('space.name')
-                    ->numeric()
-                    ->sortable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('space.price')
+                Tables\Columns\TextColumn::make('concourse.concourseRate.price')
                     ->label('Rate')
                     ->prefix('₱')
                     ->numeric()
