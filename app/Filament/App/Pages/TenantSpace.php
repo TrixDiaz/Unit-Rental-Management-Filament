@@ -106,8 +106,8 @@ class TenantSpace extends Page implements HasForms, HasTable
                     'line_items' => $lineItems,
                     'amount_total' => $total * 100,
                     'payment_method_types' => ['gcash'],
-                    'success_url' => route('welcome'),
-                    'cancel_url' => route('welcome'),
+                    'success_url' => route('filament.app.pages.tenant-space.payment-success', ['record' => $record->id]),
+                    'cancel_url' => route('filament.app.pages.tenant-space.payment-cancel'),
                     'description' => 'Payment for monthly rent',
                 ],
             ],
@@ -140,5 +140,23 @@ class TenantSpace extends Page implements HasForms, HasTable
             ->body($message)
             ->status($status)
             ->send();
+    }
+
+    public function handlePaymentSuccess($recordId)
+    {
+        $tenant = Tenant::findOrFail($recordId);
+        $tenant->bills = [];
+        $tenant->monthly_payment = 0;
+        $tenant->payment_status = 'Paid';
+        $tenant->save();
+
+        $this->notify('success', 'Payment Successful', 'Your payment has been processed successfully.');
+        return redirect()->route('filament.app.pages.tenant-space');
+    }
+
+    public function handlePaymentCancel()
+    {
+        $this->notify('warning', 'Payment Cancelled', 'Your payment has been cancelled.');
+        return redirect()->route('filament.app.pages.tenant-space');
     }
 }
