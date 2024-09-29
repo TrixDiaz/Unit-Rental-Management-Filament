@@ -49,7 +49,8 @@
             class='lg:!flex lg:ml-12 lg:space-x-6 max-lg:space-y-6 max-lg:fixed max-lg:bg-white max-lg:w-1/2 max-lg:min-w-[300px] max-lg:top-0 max-lg:left-0 max-lg:p-4 max-lg:h-full max-lg:shadow-md max-lg:overflow-auto z-50'>
             <li class='max-lg:border-b max-lg:pb-4 px-3 lg:hidden'>
               <a href="javascript:void(0)">
-                <img src="https://readymadeui.com/readymadeui.svg" alt="logo" class='w-40' />
+                <!-- <img src="https://readymadeui.com/readymadeui.svg" alt="logo" class='w-40' /> -->
+                Logo
               </a>
             </li>
             <li class='max-lg:border-b max-lg:py-2 px-3'>
@@ -71,39 +72,7 @@
                     class='hover:text-blue-600 font-semibold block transition-all'>About</a></li>
                 <li class='border-b py-2 '><a href='javascript:void(0)'
                     class='hover:text-blue-600 font-semibold block transition-all'>Contact</a></li>
-                <li class='border-b py-2 '><a href='javascript:void(0)'
-                    class='hover:text-blue-600 font-semibold block transition-all'>Login</a></li>
-                <li class='border-b py-2 '><a href='javascript:void(0)'
-                    class='hover:text-blue-600 font-semibold block transition-all'>Sign
-                    up</a></li>
-                <li class='border-b py-2 '><a href='javascript:void(0)'
-                    class='hover:text-blue-600 font-semibold block transition-all'>Blog</a></li>
               </ul>
-            </li>
-            <li class='max-lg:border-b max-lg:py-2 px-3 group relative'><a href='javascript:void(0)'
-                class='hover:text-blue-600 block font-semibold transition-all'>Feature
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 fill-current inline ml-1.5" viewBox="0 0 24 24">
-                  <path fill-rule="evenodd"
-                    d="M11.99997 18.1669a2.38 2.38 0 0 1-1.68266-.69733l-9.52-9.52a2.38 2.38 0 1 1 3.36532-3.36532l7.83734 7.83734 7.83734-7.83734a2.38 2.38 0 1 1 3.36532 3.36532l-9.52 9.52a2.38 2.38 0 0 1-1.68266.69734z"
-                    clip-rule="evenodd" data-original="#000000" />
-                </svg>
-              </a>
-
-              <ul
-                class='absolute shadow-lg bg-white space-y-3 lg:top-5 max-lg:top-8 -left-0 min-w-[250px] z-50 max-h-0 overflow-hidden group-hover:opacity-100 group-hover:max-h-[700px] px-6 group-hover:pb-4 group-hover:pt-6 transition-all duration-500'>
-                <li class='border-b py-2 '><a href='javascript:void(0)'
-                    class='hover:text-blue-600 font-semibold block transition-all'>Foods</a></li>
-                <li class='border-b py-2 '>
-                  <a href='javascript:void(0)' class='hover:text-blue-600 font-semibold block transition-all'>Sale</a>
-                </li>
-                <li class='border-b py-2 '><a href='javascript:void(0)'
-                    class='hover:text-blue-600 font-semibold block transition-all'>Marketing</a></li>
-                <li class='border-b py-2 '><a href='javascript:void(0)'
-                    class='hover:text-blue-600 font-semibold block transition-all'>Investment</a></li>
-              </ul>
-            </li>
-            <li class='max-lg:border-b max-lg:py-2 px-3'><a href='javascript:void(0)'
-                class='hover:text-blue-600 block font-semibold transition-all'>Blog</a>
             </li>
             <li class='max-lg:border-b max-lg:py-2 px-3'><a href='javascript:void(0)'
                 class='hover:text-blue-600 block font-semibold transition-all'>About</a>
@@ -112,15 +81,17 @@
         </div>
 
         <div class='flex ml-auto'>
-          <button
-            class='bg-blue-100 hover:bg-blue-200 flex items-center transition-all font-semibold rounded-md px-5 py-3'>Get
-            started
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-[14px] fill-current ml-2" viewBox="0 0 492.004 492.004">
-              <path
-                d="M484.14 226.886 306.46 49.202c-5.072-5.072-11.832-7.856-19.04-7.856-7.216 0-13.972 2.788-19.044 7.856l-16.132 16.136c-5.068 5.064-7.86 11.828-7.86 19.04 0 7.208 2.792 14.2 7.86 19.264L355.9 207.526H26.58C11.732 207.526 0 219.15 0 234.002v22.812c0 14.852 11.732 27.648 26.58 27.648h330.496L252.248 388.926c-5.068 5.072-7.86 11.652-7.86 18.864 0 7.204 2.792 13.88 7.86 18.948l16.132 16.084c5.072 5.072 11.828 7.836 19.044 7.836 7.208 0 13.968-2.8 19.04-7.872l177.68-177.68c5.084-5.088 7.88-11.88 7.86-19.1.016-7.244-2.776-14.04-7.864-19.12z"
-                data-original="#000000" />
-            </svg>
-          </button>
+          <a href="{{ route('filament.app.auth.login') }}">
+            <button
+              class='bg-blue-100 hover:bg-blue-200 flex items-center transition-all font-semibold rounded-md px-5 py-3'>Get
+              started
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-[14px] fill-current ml-2" viewBox="0 0 492.004 492.004">
+                <path
+                  d="M484.14 226.886 306.46 49.202c-5.072-5.072-11.832-7.856-19.04-7.856-7.216 0-13.972 2.788-19.044 7.856l-16.132 16.136c-5.068 5.064-7.86 11.828-7.86 19.04 0 7.208 2.792 14.2 7.86 19.264L355.9 207.526H26.58C11.732 207.526 0 219.15 0 234.002v22.812c0 14.852 11.732 27.648 26.58 27.648h330.496L252.248 388.926c-5.068 5.072-7.86 11.652-7.86 18.864 0 7.204 2.792 13.88 7.86 18.948l16.132 16.084c5.072 5.072 11.828 7.836 19.044 7.836 7.208 0 13.968-2.8 19.04-7.872l177.68-177.68c5.084-5.088 7.88-11.88 7.86-19.1.016-7.244-2.776-14.04-7.864-19.12z"
+                  data-original="#000000" />
+              </svg>
+            </button>
+          </a>
           <button id="toggleOpen" class='lg:hidden ml-7'>
             <svg class="w-7 h-7" fill="#000" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd"
@@ -142,16 +113,18 @@
               that provide insightful strategies. Our cutting-edge analytics empower you to make informed decisions and
               strategically scale your business.</p>
             <div class="flex flex-wrap gap-y-4 gap-x-8 mt-8">
-              <button
-                class='bg-black hover:bg-[#222] text-white flex items-center transition-all font-semibold rounded-md px-5 py-4'>Get
-                started
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-[14px] fill-current ml-2"
-                  viewBox="0 0 492.004 492.004">
-                  <path
-                    d="M484.14 226.886 306.46 49.202c-5.072-5.072-11.832-7.856-19.04-7.856-7.216 0-13.972 2.788-19.044 7.856l-16.132 16.136c-5.068 5.064-7.86 11.828-7.86 19.04 0 7.208 2.792 14.2 7.86 19.264L355.9 207.526H26.58C11.732 207.526 0 219.15 0 234.002v22.812c0 14.852 11.732 27.648 26.58 27.648h330.496L252.248 388.926c-5.068 5.072-7.86 11.652-7.86 18.864 0 7.204 2.792 13.88 7.86 18.948l16.132 16.084c5.072 5.072 11.828 7.836 19.044 7.836 7.208 0 13.968-2.8 19.04-7.872l177.68-177.68c5.084-5.088 7.88-11.88 7.86-19.1.016-7.244-2.776-14.04-7.864-19.12z"
-                    data-original="#000000" />
-                </svg>
-              </button>
+              <!-- <a href="{{ route('filament.app.auth.login') }}">
+                <button
+                  class='bg-black hover:bg-[#222] text-white flex items-center transition-all font-semibold rounded-md px-5 py-4'>Get
+                  started
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-[14px] fill-current ml-2"
+                    viewBox="0 0 492.004 492.004">
+                    <path
+                      d="M484.14 226.886 306.46 49.202c-5.072-5.072-11.832-7.856-19.04-7.856-7.216 0-13.972 2.788-19.044 7.856l-16.132 16.136c-5.068 5.064-7.86 11.828-7.86 19.04 0 7.208 2.792 14.2 7.86 19.264L355.9 207.526H26.58C11.732 207.526 0 219.15 0 234.002v22.812c0 14.852 11.732 27.648 26.58 27.648h330.496L252.248 388.926c-5.068 5.072-7.86 11.652-7.86 18.864 0 7.204 2.792 13.88 7.86 18.948l16.132 16.084c5.072 5.072 11.828 7.836 19.044 7.836 7.208 0 13.968-2.8 19.04-7.872l177.68-177.68c5.084-5.088 7.88-11.88 7.86-19.1.016-7.244-2.776-14.04-7.864-19.12z"
+                      data-original="#000000" />
+                  </svg>
+                </button>
+              </a> -->
             </div>
           </div>
           <div class="max-lg:mt-12 h-full">
@@ -309,15 +282,17 @@
         <p>Veniam proident aute magna anim excepteur et ex consectetur velit ullamco veniam minim
           aute sit. Elit occaecat officia et laboris Lorem minim. Officia do aliqua adipisicing ullamco in. consectetur
           velit ullamco veniam minim aute sit.</p>
-        <button
-          class="bg-black hover:bg-[#222] text-white flex items-center transition-all font-semibold rounded-md px-5 py-4 mt-8">
-          Get started
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-[14px] fill-current ml-2" viewBox="0 0 492.004 492.004">
-            <path
-              d="M484.14 226.886 306.46 49.202c-5.072-5.072-11.832-7.856-19.04-7.856-7.216 0-13.972 2.788-19.044 7.856l-16.132 16.136c-5.068 5.064-7.86 11.828-7.86 19.04 0 7.208 2.792 14.2 7.86 19.264L355.9 207.526H26.58C11.732 207.526 0 219.15 0 234.002v22.812c0 14.852 11.732 27.648 26.58 27.648h330.496L252.248 388.926c-5.068 5.072-7.86 11.652-7.86 18.864 0 7.204 2.792 13.88 7.86 18.948l16.132 16.084c5.072 5.072 11.828 7.836 19.044 7.836 7.208 0 13.968-2.8 19.04-7.872l177.68-177.68c5.084-5.088 7.88-11.88 7.86-19.1.016-7.244-2.776-14.04-7.864-19.12z"
-              data-original="#000000"></path>
-          </svg>
-        </button>
+        <!-- <a href="{{ route('filament.app.auth.login') }}">
+          <button
+            class="bg-black hover:bg-[#222] text-white flex items-center transition-all font-semibold rounded-md px-5 py-4 mt-8">
+            Get started
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-[14px] fill-current ml-2" viewBox="0 0 492.004 492.004">
+              <path
+                d="M484.14 226.886 306.46 49.202c-5.072-5.072-11.832-7.856-19.04-7.856-7.216 0-13.972 2.788-19.044 7.856l-16.132 16.136c-5.068 5.064-7.86 11.828-7.86 19.04 0 7.208 2.792 14.2 7.86 19.264L355.9 207.526H26.58C11.732 207.526 0 219.15 0 234.002v22.812c0 14.852 11.732 27.648 26.58 27.648h330.496L252.248 388.926c-5.068 5.072-7.86 11.652-7.86 18.864 0 7.204 2.792 13.88 7.86 18.948l16.132 16.084c5.072 5.072 11.828 7.836 19.044 7.836 7.208 0 13.968-2.8 19.04-7.872l177.68-177.68c5.084-5.088 7.88-11.88 7.86-19.1.016-7.244-2.776-14.04-7.864-19.12z"
+                data-original="#000000"></path>
+            </svg>
+          </button>
+        </a> -->
       </div>
     </div>
 
@@ -552,7 +527,7 @@
     </div>
   </div>
 
-  <div class="mt-28 px-4 sm:px-10">
+  <!-- <div class="mt-28 px-4 sm:px-10">
     <div class="max-w-7xl mx-auto bg-gradient-to-r from-teal-700 via-teal-600 to-teal-700 py-16 px-6 relative">
       <div class="max-w-2xl mx-auto text-center">
         <h2 class="md:text-4xl text-3xl font-semibold mb-6 text-white">Subscribe to Our Newsletter</h2>
@@ -572,7 +547,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- Footer -->
   <footer class="bg-gray-50">

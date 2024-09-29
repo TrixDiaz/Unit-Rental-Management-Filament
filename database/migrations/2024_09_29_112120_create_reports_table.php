@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
             $table->string('landlord_email');
-            $table->foreignId('unit_number')->constrained('units');
+            $table->integer('unit_number');
             $table->string('email');
             $table->string('phone');
             $table->string('issue_type');

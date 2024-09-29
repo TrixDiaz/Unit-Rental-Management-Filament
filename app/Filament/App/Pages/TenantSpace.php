@@ -14,10 +14,9 @@ use Filament\Notifications\Notification;
 use Ixudra\Curl\Facades\Curl;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PaymentConfirmation;
-
 use App\Models\Payment;
 use App\Services\ReportForm;
-use App\Models\Report; // Add this line at the top of the file
+use App\Models\Report; 
 
 class TenantSpace extends Page implements HasForms, HasTable
 {
