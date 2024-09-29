@@ -42,6 +42,10 @@ class ConcourseResource extends Resource
                                 Forms\Components\TextInput::make('name')
                                     ->required()
                                     ->maxLength(255),
+                                Forms\Components\TextInput::make('unit_number')
+                                    ->required()
+                                    ->numeric()
+                                    ->maxLength(255),
                                 Forms\Components\Select::make('rate_id')
                                     ->native(false)
                                     ->preload()
@@ -59,7 +63,7 @@ class ConcourseResource extends Resource
                                     ])
                                     ->native(false)
                                     ->required(),
-                            ])->columns(3),
+                            ])->columns(2),
                         ]),
 
                         Forms\Components\Section::make('Attachments')->schema([

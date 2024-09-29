@@ -50,4 +50,9 @@ class Tenant extends Model
         return $this->hasMany(Payment::class);
     }
 
+    public function reports()
+    {
+        return $this->hasMany(Report::class);
+    }
+
 }

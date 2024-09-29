@@ -5,27 +5,24 @@ namespace App\Filament\App\Pages;
 use Filament\Pages\Page;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Notifications\Actions\Action;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use App\Models\Tenant;
 use Filament\Notifications\Notification;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Route;
 use Ixudra\Curl\Facades\Curl;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PaymentConfirmation;
-use App\Models\User;
+
 use App\Models\Payment;
+use App\Services\ReportForm;
+use App\Models\Report; // Add this line at the top of the file
 
 class TenantSpace extends Page implements HasForms, HasTable
 {
     public $tenantId;
+    public $reports;
 
     use InteractsWithForms, InteractsWithTable;
 
@@ -83,8 +80,33 @@ class TenantSpace extends Page implements HasForms, HasTable
                 Tables\Actions\Action::make('payBills')
                     ->label('Pay Bills')
                     ->button()
-                    ->action(fn ($record) => $this->payWithGCash($record))
-                    ->visible(fn ($record) => $record->payment_status !== 'Paid' && $record->monthly_payment > 0),
+                    ->action(fn($record) => $this->payWithGCash($record))
+                    ->visible(fn($record) => $record->payment_status !== 'Paid' && $record->monthly_payment > 0),
+                Tables\Actions\CreateAction::make('create')
+                    ->label('Report Issue')
+                    ->disableCreateAnother()
+                    ->modalHeading('Report Issue')
+                    ->modalDescription('Report an issue with your unit.')
+                    ->modalSubmitActionLabel('Report Issue')
+                    ->modalCancelActionLabel('Cancel')
+                    ->form(fn(Tenant $record) => ReportForm::schema($record))
+                    ->action(function (array $data, Tenant $record) {
+                        Report::create([
+                            'landlord_email' => 'admin@example.com',
+                            'unit_number' => $record->concourse->unit_number,
+                            'email' => auth()->user()->email,
+                            'phone' => $data['phone'],
+                            'issue_type' => $data['issue_type'],
+                            'message' => $data['message'],
+                            'status' => 'pending',
+                        ]);
+
+                        Notification::make()
+                            ->title('Report Submitted')
+                            ->body('Your issue has been reported successfully.')
+                            ->success()
+                            ->send();
+                    })
             ]);
     }
 
@@ -150,7 +172,7 @@ class TenantSpace extends Page implements HasForms, HasTable
     protected function sendPaymentConfirmationEmail($tenant)
     {
         $user = $tenant->tenant;
-        
+
         if ($user) {
             Mail::to($user->email)->send(new PaymentConfirmation($tenant, $user));
         }
@@ -184,5 +206,10 @@ class TenantSpace extends Page implements HasForms, HasTable
     {
         $this->notify('warning', 'Payment Cancelled', 'Your payment has been cancelled.');
         return redirect()->route('filament.app.pages.tenant-space');
+    }
+
+    public function mount()
+    {
+        $this->reports = Report::where('email', auth()->user()->email)->get();
     }
 }
