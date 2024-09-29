@@ -15,8 +15,7 @@
     <h2>Unit Details:</h2>
     <ul>
         <li><strong>Concourse Name:</strong> {{ $concourse->name ?? 'N/A' }}</li>
-        <li><strong>Unit Type:</strong> {{ $concourse->unit_type ?? 'N/A' }}</li>
-        <li><strong>Monthly Rent:</strong> ${{ number_format($monthlyPayment ?? 0, 2) }}</li>
+        <li><strong>Monthly Rent:</strong> ₱{{ number_format($monthlyPayment ?? 0, 2) }}</li>
         <li><strong>Lease Start Date:</strong> {{ $leaseStart ? $leaseStart->format('F d, Y') : 'N/A' }}</li>
         <li><strong>Lease End Date:</strong> {{ $leaseEnd ? $leaseEnd->format('F d, Y') : 'N/A' }}</li>
         <li><strong>Lease Term:</strong> {{ $leaseTerm ?? 'N/A' }} months</li>

@@ -108,6 +108,12 @@ class EditApplication extends EditRecord
         $leaseStart = $tenant->lease_start;
         $leaseEnd = $tenant->lease_end;
 
+        // Fetch the price from ConcourseRate
+        $price = 0;
+        if ($concourse && $concourse->concourseRate) {
+            $price = $concourse->concourseRate->price;
+        }
+
         $contractData = [
             'user' => $user,
             'concourse' => $concourse,
@@ -115,10 +121,9 @@ class EditApplication extends EditRecord
             'tenant' => $tenant,
             'leaseStart' => $leaseStart,
             'leaseEnd' => $leaseEnd,
-            'monthlyPayment' => $tenant->monthly_payment,
+            'monthlyPayment' => $price, 
             'leaseTerm' => $tenant->lease_term,
             'bills' => json_decode($tenant->bills, true) ?? [],
-            // Add any other relevant details here
         ];
 
         Mail::to($user->email)->send(new ContractMail($application, $contractData));
