@@ -8,12 +8,17 @@ use Filament\Resources\Pages\EditRecord;
 use Filament\Notifications\Notification;
 use Filament\Notifications\Actions\Action;
 use App\Models\User;
-use App\Models\Space;
 use App\Models\ApprovedApplication;
 use App\Models\Tenant;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon; // Add this import
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ContractMail;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use App\Models\Concourse;
+use Illuminate\Support\Facades\View;
 
 class EditApplication extends EditRecord
 {
@@ -36,8 +41,6 @@ class EditApplication extends EditRecord
                     DB::transaction(function () use ($application) {
                         // Store the application data in ApprovedApplication table
                         ApprovedApplication::create($application->toArray());
-
-                     
 
                         // Delete the application from the Application table
                         $application->delete();
@@ -76,6 +79,9 @@ class EditApplication extends EditRecord
                             'monthly_payment' => $application->monthly_payment ? $application->monthly_payment : null,
                             'is_active' => true,
                         ]);
+
+                        // Send contract email
+                        $this->sendContractEmail($application, $tenant);
                     });
 
                     // Show a success message in the UI
@@ -91,7 +97,37 @@ class EditApplication extends EditRecord
                 ->color('success')
                 ->requiresConfirmation(),
             Actions\DeleteAction::make(),
+            // Remove the manual 'sendContract' action
         ];
+    }
+
+    protected function sendContractEmail($application, $tenant)
+    {
+        $user = User::find($application->user_id);
+        $concourse = Concourse::find($application->concourse_id);
+        $leaseStart = $tenant->lease_start;
+        $leaseEnd = $tenant->lease_end;
+
+        $contractData = [
+            'user' => $user,
+            'concourse' => $concourse,
+            'application' => $application,
+            'tenant' => $tenant,
+            'leaseStart' => $leaseStart,
+            'leaseEnd' => $leaseEnd,
+            'monthlyPayment' => $tenant->monthly_payment,
+            'leaseTerm' => $tenant->lease_term,
+            'bills' => json_decode($tenant->bills, true) ?? [],
+            // Add any other relevant details here
+        ];
+
+        Mail::to($user->email)->send(new ContractMail($application, $contractData));
+
+        Notification::make()
+            ->success()
+            ->title('Contract Sent')
+            ->body("The contract has been sent to {$user->email}")
+            ->send();
     }
 
     protected function getSavedNotification(): ?Notification

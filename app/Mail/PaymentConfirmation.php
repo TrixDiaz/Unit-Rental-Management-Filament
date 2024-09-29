@@ -38,17 +38,9 @@ class PaymentConfirmation extends Mailable
     /**
      * Get the message content definition.
      */
-    // public function content(): Content
-    // {
-    //     return new Content(
-    //         view: 'emails.payment-confirmation',
-    //     );
-    // }
-
     public function build()
     {
         return $this->view('emails.payment-confirmation');
-        // You can customize the view file and subject as needed
     }
 
     /**
