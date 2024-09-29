@@ -13,6 +13,8 @@ use Filament\Tables\Table;
 use Filament\Tables\Columns\SelectColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Notifications\Notification;
+use Filament\Tables\Actions\EditAction;
 
 class ReportResource extends Resource
 {
@@ -67,11 +69,17 @@ class ReportResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('issue_type')
                     ->searchable(),
-                    SelectColumn::make('status')
+                SelectColumn::make('status')
                     ->options([
                         'pending' => 'Pending',
                         'resolved' => 'Resolved',
-                    ]),
+                    ])
+                    ->afterStateUpdated(function ($record) {
+                        Notification::make()
+                            ->title('Status Updated')
+                            ->body("The status for report #{$record->id} has been updated.")
+                            ->send();
+                    }),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
@@ -89,7 +97,18 @@ class ReportResource extends Resource
                 //
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
+                EditAction::make()
+                    ->hidden()
+                    ->after(function ($record) {
+                        // Notification for the admin
+                        Notification::make()
+                            ->title('Report Updated')
+                            ->icon('heroicon-o-check-circle')
+                            ->color('success')
+                            ->body("Report #{$record->unit_number} has been updated.")
+                            ->send();
+                    }),
+
             ])
             ->bulkActions([
                 // Tables\Actions\DeleteBulkAction::make(),
