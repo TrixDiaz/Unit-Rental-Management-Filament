@@ -18,9 +18,11 @@ use Filament\Tables\Actions\EditAction;
 
 class ReportResource extends Resource
 {
+    protected static ?string $navigationGroup = 'Other';
+    
     protected static ?string $model = Report::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-exclamation-circle';
 
     public static function form(Form $form): Form
     {
