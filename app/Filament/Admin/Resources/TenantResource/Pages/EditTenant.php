@@ -6,6 +6,7 @@ use App\Filament\Admin\Resources\TenantResource;
 use App\Filament\Admin\Resources\TenantResource\Widgets\SpaceOverview;
 use App\Filament\Admin\Resources\TenantResource\Widgets\MonthlyChart;
 use App\Filament\Admin\Resources\TenantResource\Widgets\YearlyChart;
+use App\Models\Tenant;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Notifications\Notification;
@@ -39,9 +40,7 @@ class EditTenant extends EditRecord
 
     protected function getFooterWidgets(): array
     {
-        return [
-            
-        ];
+        return [];
     }
 
     protected function getSavedNotification(): ?Notification
@@ -81,6 +80,4 @@ class EditTenant extends EditRecord
 
         return $notification;
     }
-
-
 }

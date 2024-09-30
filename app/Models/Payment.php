@@ -26,13 +26,4 @@ class Payment extends Model
     {
         return $this->belongsTo(Tenant::class);
     }
-
-    public function scopeElectricityBillsForCurrentTenant($query)
-    {
-        return $query->where('tenant_id', auth()->id())
-            ->whereJsonContains('payment_details', ['name' => 'electricity'])
-            ->selectRaw('MONTH(created_at) as month, SUM(JSON_EXTRACT(payment_details, "$[*].amount")) as total_amount')
-            ->groupBy('month')
-            ->orderBy('month');
-    }
 }

@@ -16,22 +16,21 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\PaymentConfirmation;
 use App\Models\Payment;
 use App\Services\ReportForm;
-use App\Models\Report; 
+use App\Models\Report;
 use App\Filament\App\Resources\TenantSpaceResource\Widgets\WaterMonthlyBills;
 use App\Filament\App\Resources\TenantSpaceResource\Widgets\ElectricityMonthlyBills;
 
 class TenantSpace extends Page implements HasForms, HasTable
 {
     public $tenantId;
-    public $reports;
 
     use InteractsWithForms, InteractsWithTable;
 
     protected function getHeaderWidgets(): array
     {
         return [
-          WaterMonthlyBills::class,
-          ElectricityMonthlyBills::class,
+            WaterMonthlyBills::class,
+            ElectricityMonthlyBills::class,
         ];
     }
 
@@ -45,6 +44,13 @@ class TenantSpace extends Page implements HasForms, HasTable
             ->query(Tenant::query()
                 ->where('is_active', true)
                 ->where('tenant_id', auth()->user()->id))
+            ->headerActions([
+                Tables\Actions\Action::make('viewReports')
+                    ->label('View Reports')
+                    ->url(fn() => route('filament.app.pages.reports'))
+                    ->icon('heroicon-o-document-text')
+                    ->openUrlInNewTab()
+            ])
             ->columns([
                 Tables\Columns\TextColumn::make('concourse.name')
                     ->label('Concourse')
@@ -116,7 +122,7 @@ class TenantSpace extends Page implements HasForms, HasTable
                             ->success()
                             ->send();
                     })
-            ]);
+            ])->poll('30s');
     }
 
     protected function payWithGCash($record)
@@ -190,17 +196,17 @@ class TenantSpace extends Page implements HasForms, HasTable
     public function handlePaymentSuccess($recordId)
     {
         $tenant = Tenant::findOrFail($recordId);
-        
+
         // $this->sendPaymentConfirmationEmail($tenant);
-        
+
         $billsBeforePayment = $tenant->bills; // Store the bills before clearing them
         $amountPaid = $tenant->monthly_payment; // Store the amount paid
-        
+
         $tenant->bills = [];
         $tenant->monthly_payment = 0;
         $tenant->payment_status = 'Paid';
         $tenant->save();
-        
+
         // Create a new Payment record with bills information
         Payment::create([
             'tenant_id' => $tenant->id,
@@ -219,10 +225,5 @@ class TenantSpace extends Page implements HasForms, HasTable
     {
         $this->notify('warning', 'Payment Cancelled', 'Your payment has been cancelled.');
         return redirect()->route('filament.app.pages.tenant-space');
-    }
-
-    public function mount()
-    {
-        $this->reports = Report::where('email', auth()->user()->email)->get();
     }
 }

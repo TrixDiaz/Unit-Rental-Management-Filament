@@ -72,6 +72,7 @@ class EditApplication extends EditRecord
                             'concourse_id' => $application->concourse_id,
                             'owner_id' => $application->user_id,
                             'lease_start' => $application->created_at,
+                            'lease_due' => Carbon::parse($application->created_at)->addMonths(1),
                             'lease_end' => Carbon::parse($application->created_at)->addMonths($application->lease_term),
                             'lease_term' => $application->lease_term,
                             'lease_status' => 'active',
@@ -126,7 +127,7 @@ class EditApplication extends EditRecord
             'bills' => json_decode($tenant->bills, true) ?? [],
         ];
 
-        Mail::to($user->email)->send(new ContractMail($application, $contractData));
+       // Mail::to($user->email)->send(new ContractMail($application, $contractData));
 
         Notification::make()
             ->success()

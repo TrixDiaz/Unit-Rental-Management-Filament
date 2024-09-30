@@ -52,6 +52,17 @@ class TenantResource extends Resource
                                 ->preload()
                                 ->required()
                                 ->disabled(),
+                            Forms\Components\DatePicker::make('lease_start')
+                                ->label('Lease Start')
+                                ->native(false)
+                                ->disabled(),
+                            Forms\Components\DatePicker::make('lease_due')
+                                ->label('Lease Due')
+                                ->native(false)
+                                ->required(),
+                            Forms\Components\TextInput::make('lease_term')
+                                ->label('Lease Term')
+                                ->disabled(),
                         ])->columns(3),
                     Forms\Components\Section::make('Bills Utility')->description('Add the utility bills for the tenant')->schema([
                         Repeater::make('bills')
@@ -91,6 +102,7 @@ class TenantResource extends Resource
                             ->label('Lease Status')
                             ->native(false)
                             ->options([
+                                'active' => 'Active',
                                 'paid' => 'Paid',
                                 'unpaid' => 'Unpaid',
                                 'overdue' => 'Overdue',
@@ -99,7 +111,6 @@ class TenantResource extends Resource
                         Forms\Components\Select::make('payment_status')
                             ->label('Payment Status')
                             ->native(false)
-                            ->required()
                             ->options([
                                 'paid' => 'Paid',
                                 'unpaid' => 'Unpaid',
@@ -256,6 +267,10 @@ class TenantResource extends Resource
                     ->dateTime('F j, Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('lease_due')
+                    ->dateTime('F j, Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('lease_term')
                     ->label('Lease Term')
                     ->formatStateUsing(fn($state) => $state . ' Months')
@@ -298,6 +313,13 @@ class TenantResource extends Resource
                     ->label('Active'),
             ])
             ->actions([
+                Tables\Actions\Action::make('updateBills')
+                ->label('Update Bills')
+                ->icon('heroicon-o-arrow-path-rounded-square')
+                ->color('warning')
+                ->action(function (Tenant $record) {
+                    $record->updateBillsIfDue();
+                }),
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make()->color('info'),
                     Tables\Actions\EditAction::make()->color('primary'),
