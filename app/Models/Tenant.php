@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
+use Filament\Notifications\Notification;
 
 class Tenant extends Model
 {
@@ -64,10 +65,12 @@ class Tenant extends Model
 
         static::creating(function ($model) {
             $model->updateBillsIfDue();
+            $model->checkLeaseExpirationAndNotify();
         });
 
         static::updating(function ($model) {
             $model->updateBillsIfDue();
+            $model->checkLeaseExpirationAndNotify();
         });
     }
 
@@ -114,5 +117,37 @@ class Tenant extends Model
     {
         $this->attributes['lease_due'] = $value;
         $this->updateBillsIfDue();
+    }
+
+    public function checkLeaseExpirationAndNotify()
+    {
+        if ($this->lease_due) {
+            $leaseDate = Carbon::parse($this->lease_due);
+            $today = Carbon::today();
+            $daysUntilDue = $today->diffInDays($leaseDate, false);
+
+            if ($daysUntilDue <= 7) {
+                $tenant = $this->tenant;
+                $owner = $this->owner;
+
+                if ($tenant) {
+                   Notification::make()
+                   ->warning()
+                   ->title('Lease Due')
+                   ->icon('heroicon-o-exclamation-circle')
+                   ->body('Your lease is due to expire in 7 days.')
+                   ->sendToDatabase($tenant);
+                }
+
+                if ($owner) {
+                    Notification::make()
+                    ->warning()
+                    ->title('Lease Due '. $this->tenant->unit_number)
+                    ->icon('heroicon-o-exclamation-circle')
+                    ->body('lease is due to expire in 7 days.')
+                    ->sendToDatabase($owner);
+                }
+            }
+        }
     }
 }

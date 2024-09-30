@@ -57,11 +57,6 @@ class EditTenant extends EditRecord
                     ->label('Mark as read')
                     ->link()
                     ->markAsRead(),
-                Action::make('delete')
-                    ->label('Delete')
-                    ->color('danger')
-                    ->icon('heroicon-o-trash')
-                    ->action(fn(Notification $notification) => $notification->delete()),
             ]);
 
         // Get the selected user's ID
