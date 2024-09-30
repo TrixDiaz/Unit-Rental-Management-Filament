@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Tenant;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Carbon\Carbon;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Payment>
@@ -17,8 +18,8 @@ class PaymentFactory extends Factory
      */
     public function definition(): array
     {
-        $startDate = now()->startOfYear();
-        $endDate = now()->endOfYear();
+        $startDate = Carbon::now()->subYears(4); // 4 years ago from now
+    $endDate = Carbon::now(); 
 
         return [
             'tenant_id' => Tenant::select('id')->inRandomOrder()->first()->id, 
