@@ -99,6 +99,7 @@ class TenantResource extends Resource
                         Forms\Components\Select::make('payment_status')
                             ->label('Payment Status')
                             ->native(false)
+                            ->required()
                             ->options([
                                 'paid' => 'Paid',
                                 'unpaid' => 'Unpaid',

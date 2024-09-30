@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('payment_type');
             $table->string('payment_method');
             $table->string('payment_status');
+            $table->json('payment_details')->nullable();
             $table->foreign('tenant_id')->references('id')->on('tenants');
             $table->timestamps();
         });

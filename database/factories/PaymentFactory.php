@@ -11,21 +11,28 @@ use Carbon\Carbon;
  */
 class PaymentFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
-        $startDate = Carbon::now()->subYears(4); // 4 years ago from now
-    $endDate = Carbon::now(); 
+        $startDate = Carbon::now()->startOfYear();
+        $endDate = Carbon::now()->endOfYear();
+
+        $paymentDetails = [
+            [
+                'name' => 'water',
+                'amount' => (string) $this->faker->numberBetween(50, 500)
+            ],
+            [
+                'name' => 'electricity',
+                'amount' => (string) $this->faker->numberBetween(50, 500)
+            ]
+        ];
 
         return [
-            'tenant_id' => Tenant::select('id')->inRandomOrder()->first()->id, 
-            'amount' => $this->faker->numberBetween(100, 1000),
+            'tenant_id' => Tenant::select('id')->inRandomOrder()->first()->id,
+            'amount' => collect($paymentDetails)->sum(fn($item) => (int) $item['amount']),
+            'payment_details' => json_encode($paymentDetails),
             'payment_method' => $this->faker->randomElement(['maya', 'gcash']),
-            'payment_status' => $this->faker->randomElement(['paid', 'unpaid']),
+            'payment_status' => $this->faker->randomElement(['paid', 'unpaid', 'overdue', 'pending']),
             'payment_type' => $this->faker->randomElement(['cash', 'e-wallet']),
             'created_at' => $this->faker->dateTimeBetween($startDate, $endDate),
         ];

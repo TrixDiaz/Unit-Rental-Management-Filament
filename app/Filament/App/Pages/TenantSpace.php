@@ -17,6 +17,8 @@ use App\Mail\PaymentConfirmation;
 use App\Models\Payment;
 use App\Services\ReportForm;
 use App\Models\Report; 
+use App\Filament\App\Resources\TenantSpaceResource\Widgets\WaterMonthlyBills;
+use App\Filament\App\Resources\TenantSpaceResource\Widgets\ElectricityMonthlyBills;
 
 class TenantSpace extends Page implements HasForms, HasTable
 {
@@ -24,6 +26,14 @@ class TenantSpace extends Page implements HasForms, HasTable
     public $reports;
 
     use InteractsWithForms, InteractsWithTable;
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+          WaterMonthlyBills::class,
+          ElectricityMonthlyBills::class,
+        ];
+    }
 
     protected static ?string $navigationIcon = 'heroicon-o-home-modern';
 
@@ -80,7 +90,7 @@ class TenantSpace extends Page implements HasForms, HasTable
                     ->label('Pay Bills')
                     ->button()
                     ->action(fn($record) => $this->payWithGCash($record))
-                    ->visible(fn($record) => $record->payment_status !== 'Paid' && $record->monthly_payment > 0),
+                    ->visible(fn($record) => $record->payment_status !== 'Paid' || $record->monthly_payment > 0),
                 Tables\Actions\CreateAction::make('create')
                     ->label('Report Issue')
                     ->disableCreateAnother()
@@ -180,22 +190,26 @@ class TenantSpace extends Page implements HasForms, HasTable
     public function handlePaymentSuccess($recordId)
     {
         $tenant = Tenant::findOrFail($recordId);
-        $this->sendPaymentConfirmationEmail($tenant);
-
-        $tenant = Tenant::findOrFail($recordId);
+        
+        // $this->sendPaymentConfirmationEmail($tenant);
+        
+        $billsBeforePayment = $tenant->bills; // Store the bills before clearing them
+        $amountPaid = $tenant->monthly_payment; // Store the amount paid
+        
         $tenant->bills = [];
         $tenant->monthly_payment = 0;
         $tenant->payment_status = 'Paid';
         $tenant->save();
-
-        // Create a new Payment record
+        
+        // Create a new Payment record with bills information
         Payment::create([
             'tenant_id' => $tenant->id,
+            'amount' => $amountPaid,
             'payment_type' => 'Monthly Rent',
+            'payment_details' => json_encode($billsBeforePayment), // Use the stored bills
             'payment_method' => 'GCash',
             'payment_status' => 'Completed',
         ]);
-
 
         $this->notify('success', 'Payment Successful', 'Your payment has been processed successfully.');
         return redirect()->route('filament.app.pages.tenant-space');
