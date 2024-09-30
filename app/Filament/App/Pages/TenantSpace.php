@@ -96,7 +96,7 @@ class TenantSpace extends Page implements HasForms, HasTable
                     ->label('Pay Bills')
                     ->button()
                     ->action(fn($record) => $this->payWithGCash($record))
-                    ->visible(fn($record) => $record->payment_status !== 'Paid' || $record->monthly_payment > 0),
+                    ->visible(fn($record) => $record->payment_status !== 'Paid' && $record->monthly_payment > 0),
                 Tables\Actions\CreateAction::make('create')
                     ->label('Report Issue')
                     ->disableCreateAnother()

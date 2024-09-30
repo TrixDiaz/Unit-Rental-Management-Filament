@@ -65,12 +65,11 @@ class Tenant extends Model
 
         static::creating(function ($model) {
             $model->updateBillsIfDue();
-            $model->checkLeaseExpirationAndNotify();
         });
 
         static::updating(function ($model) {
             $model->updateBillsIfDue();
-            $model->checkLeaseExpirationAndNotify();
+          
         });
     }
 
@@ -79,31 +78,36 @@ class Tenant extends Model
         if ($this->lease_due) {
             $leaseDate = Carbon::parse($this->lease_due);
             $today = Carbon::today();
+            $sevenDaysBefore = $leaseDate->copy()->subDays(7);
 
-            // Check if the lease_due is today or in the past
-            if ($leaseDate->lte($today)) {
+            // Check if today is 7 days before the lease_due or later
+            if ($today->gte($sevenDaysBefore)) {
                 $rentAmount = $this->concourse->concourseRate->price ?? 0;
-                
+
                 $bills = $this->bills ?? [];
-                
-                // Check if a bill for this month already exists
-                $billExists = collect($bills)->contains(function ($bill) use ($today) {
+
+                // Check if a bill for this lease period already exists
+                $billExists = collect($bills)->contains(function ($bill) use ($leaseDate) {
                     return isset($bill['name']) && $bill['name'] == 'Monthly Rent' &&
-                           isset($bill['for_month']) && $bill['for_month'] == $today->format('Y-m');
+                        isset($bill['for_month']) && $bill['for_month'] == $leaseDate->format('Y-m');
                 });
-                
+
                 if (!$billExists) {
                     $bills[] = [
                         'name' => 'Monthly Rent',
                         'amount' => $rentAmount,
-                        'for_month' => $today->format('Y-m'),
+                        'for_month' => $leaseDate->format('Y-m'),
+                        'due_date' => $leaseDate->toDateString(),
                     ];
-                    
+
                     $this->bills = $bills;
                     $this->monthly_payment = $rentAmount;
-                    $this->lease_status = 'due';
+                    $this->lease_status = 'due_soon';
                     $this->payment_status = 'pending';
                     $this->save();
+
+                    // Send notifications to tenant and owner
+                    $this->sendBillUpdateNotifications($rentAmount, $leaseDate);
 
                     return true; // Return true if bills were updated
                 }
@@ -111,6 +115,30 @@ class Tenant extends Model
         }
 
         return false; // Return false if no update was needed
+    }
+
+    private function sendBillUpdateNotifications($rentAmount, $dueDate)
+    {
+        $tenant = $this->tenant;
+        $owner = $this->owner;
+
+        if ($tenant) {
+            Notification::make()
+                ->info()
+                ->title('New Bill Added')
+                ->icon('heroicon-o-currency-dollar')
+                ->body("A new monthly rent bill of {$rentAmount} has been added to your account, due on {$dueDate->format('F j, Y')}.")
+                ->sendToDatabase($tenant);
+        }
+
+        if ($owner) {
+            Notification::make()
+                ->info()
+                ->title('New Bill Added for ' . $tenant->unit_number)
+                ->icon('heroicon-o-currency-dollar')
+                ->body("A new monthly rent bill of {$rentAmount} has been added to the tenant's account, due on {$dueDate->format('F j, Y')}.")
+                ->sendToDatabase($owner);
+        }
     }
 
     public function setLeaseDueAttribute($value)
@@ -131,21 +159,21 @@ class Tenant extends Model
                 $owner = $this->owner;
 
                 if ($tenant) {
-                   Notification::make()
-                   ->warning()
-                   ->title('Lease Due')
-                   ->icon('heroicon-o-exclamation-circle')
-                   ->body('Your lease is due to expire in 7 days.')
-                   ->sendToDatabase($tenant);
+                    Notification::make()
+                        ->warning()
+                        ->title('Lease Due')
+                        ->icon('heroicon-o-exclamation-circle')
+                        ->body('Your lease is due to expire in 7 days.')
+                        ->sendToDatabase($tenant);
                 }
 
                 if ($owner) {
                     Notification::make()
-                    ->warning()
-                    ->title('Lease Due '. $this->tenant->unit_number)
-                    ->icon('heroicon-o-exclamation-circle')
-                    ->body('lease is due to expire in 7 days.')
-                    ->sendToDatabase($owner);
+                        ->warning()
+                        ->title('Lease Due ' . $this->tenant->unit_number)
+                        ->icon('heroicon-o-exclamation-circle')
+                        ->body('lease is due to expire in 7 days.')
+                        ->sendToDatabase($owner);
                 }
             }
         }

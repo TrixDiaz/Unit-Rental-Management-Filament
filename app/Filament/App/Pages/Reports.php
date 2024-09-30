@@ -20,6 +20,8 @@ class Reports extends Page implements HasForms, HasTable
 
     protected static string $view = 'filament.app.pages.reports';
 
+    protected static bool $shouldRegisterNavigation = false;
+
     public function table(Table $table): Table
     {
         return $table

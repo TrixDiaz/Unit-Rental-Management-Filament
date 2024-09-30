@@ -9,6 +9,7 @@ use App\Models\Tenant;
 use Filament\Forms;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Filters\SelectFilter;
@@ -270,6 +271,7 @@ class TenantResource extends Resource
                 Tables\Columns\TextColumn::make('lease_due')
                     ->dateTime('F j, Y')
                     ->sortable()
+                    ->disabled()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('lease_term')
                     ->label('Lease Term')
@@ -314,12 +316,25 @@ class TenantResource extends Resource
             ])
             ->actions([
                 Tables\Actions\Action::make('updateBills')
-                ->label('Update Bills')
-                ->icon('heroicon-o-arrow-path-rounded-square')
-                ->color('warning')
-                ->action(function (Tenant $record) {
-                    $record->updateBillsIfDue();
-                }),
+                    ->label('Update Bills')
+                    ->icon('heroicon-o-arrow-path-rounded-square')
+                    ->color('warning')
+                    ->action(function (Tenant $record) {
+                        $updated = $record->updateBillsIfDue();
+                        if ($updated) {
+                            Notification::make()
+                                ->success()
+                                ->title('Bills Updated')
+                                ->body('The bills have been updated successfully.')
+                                ->send();
+                        } else {
+                            Notification::make()
+                                ->info()
+                                ->title('No Update Needed')
+                                ->body('The bills are already up to date or it\'s not time to update yet.')
+                                ->send();
+                        }
+                    }),
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make()->color('info'),
                     Tables\Actions\EditAction::make()->color('primary'),

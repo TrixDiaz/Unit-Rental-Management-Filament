@@ -28,7 +28,7 @@ class PaymentFactory extends Factory
         ];
 
         return [
-            'tenant_id' => Tenant::select('id')->inRandomOrder()->first()->id,
+            'tenant_id' => $this->faker->randomElement(Tenant::pluck('id')),
             'amount' => collect($paymentDetails)->sum(fn($item) => (int) $item['amount']),
             'payment_details' => json_encode($paymentDetails),
             'payment_method' => $this->faker->randomElement(['maya', 'gcash']),

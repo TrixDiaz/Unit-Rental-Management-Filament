@@ -4,8 +4,6 @@ namespace App\Filament\Admin\Resources\TenantResource\Pages;
 
 use App\Filament\Admin\Resources\TenantResource;
 use App\Filament\Admin\Resources\TenantResource\Widgets\SpaceOverview;
-use App\Filament\Admin\Resources\TenantResource\Widgets\MonthlyChart;
-use App\Filament\Admin\Resources\TenantResource\Widgets\YearlyChart;
 use App\Models\Tenant;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
@@ -33,8 +31,6 @@ class EditTenant extends EditRecord
     {
         return [
             SpaceOverview::class,
-            MonthlyChart::class,
-            YearlyChart::class,
         ];
     }
 

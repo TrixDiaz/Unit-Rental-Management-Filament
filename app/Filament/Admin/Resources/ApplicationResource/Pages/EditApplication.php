@@ -81,6 +81,12 @@ class EditApplication extends EditRecord
                             'is_active' => true,
                         ]);
 
+                        // Update the concourse status to 'occupied'
+                        $concourse = Concourse::find($application->concourse_id);
+                        if ($concourse) {
+                            $concourse->update(['status' => 'occupied']);
+                        }
+
                         // Send contract email
                         $this->sendContractEmail($application, $tenant);
                     });
@@ -158,11 +164,6 @@ class EditApplication extends EditRecord
                     ->label('Mark as read')
                     ->button()
                     ->markAsRead(),
-                Action::make('delete')
-                    ->label('Delete')
-                    ->color('danger')
-                    ->icon('heroicon-o-trash')
-                    ->action(fn(Notification $notification) => $notification->delete()),
             ])
             ->sendToDatabase($authUser);
 
@@ -185,11 +186,6 @@ class EditApplication extends EditRecord
                         ->label('View Application')
                         ->button()
                         ->url($url),
-                    Action::make('delete')
-                        ->label('Delete')
-                        ->color('danger')
-                        ->icon('heroicon-o-trash')
-                        ->action(fn(Notification $notification) => $notification->delete()),
                 ])
                 ->sendToDatabase($selectedUser);
         }

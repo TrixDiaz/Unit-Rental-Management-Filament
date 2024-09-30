@@ -63,6 +63,20 @@ class ConcourseResource extends Resource
                                     ])
                                     ->native(false)
                                     ->required(),
+                                Forms\Components\TextInput::make('deposit')
+                                    ->label('Deposit')
+                                    ->numeric()
+                                    ->prefix('₱')
+                                    ->required(),
+                                Forms\Components\Select::make('status')
+                                    ->default('available')
+                                    ->options([
+                                        'available' => 'Available',
+                                        'occupied' => 'Occupied',
+                                        'under_maintenance' => 'Under Maintenance',
+                                        'under_renovation' => 'Under Renovation',
+                                    ])
+                                    ->disabledOn('create'),
                             ])->columns(2),
                         ]),
 
