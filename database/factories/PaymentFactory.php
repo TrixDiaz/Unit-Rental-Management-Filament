@@ -17,12 +17,16 @@ class PaymentFactory extends Factory
      */
     public function definition(): array
     {
+        $startDate = now()->startOfYear();
+        $endDate = now()->endOfYear();
+
         return [
             'tenant_id' => Tenant::select('id')->inRandomOrder()->first()->id, 
             'amount' => $this->faker->numberBetween(100, 1000),
-            'payment_method' => $this->faker->randomElement(['cash', 'gcash', 'paymongo']),
+            'payment_method' => $this->faker->randomElement(['maya', 'gcash']),
             'payment_status' => $this->faker->randomElement(['paid', 'unpaid']),
             'payment_type' => $this->faker->randomElement(['cash', 'e-wallet']),
+            'created_at' => $this->faker->dateTimeBetween($startDate, $endDate),
         ];
     }
 }
