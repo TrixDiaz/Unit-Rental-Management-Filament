@@ -56,6 +56,10 @@ class TenantSpace extends Page implements HasForms, HasTable
                     ->label('Concourse')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('concourse.unit_number')
+                    ->label('Unit Number')
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('lease_start')
                     ->label('Lease Start')
                     ->date('F j, Y')

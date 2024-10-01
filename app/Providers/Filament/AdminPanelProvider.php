@@ -50,6 +50,12 @@ class AdminPanelProvider extends PanelProvider
                 // Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,
             ])
+            ->navigationGroups([
+                'Unit Settings',
+                'Tenant Settings',
+                'Other',
+                'Filament Shield'
+                ])
             ->pages([
                 Pages\Dashboard::class,
             ])
