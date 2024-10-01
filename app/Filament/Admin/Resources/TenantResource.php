@@ -6,6 +6,8 @@ use App\Filament\Admin\Resources\TenantResource\Pages;
 use App\Filament\Admin\Resources\TenantResource\RelationManagers;
 use App\Filament\Admin\Resources\TenantResource\Widgets\TenantsRevenue;
 use App\Models\Tenant;
+use App\Models\User;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Form;
@@ -250,12 +252,6 @@ class TenantResource extends Resource
                     ->numeric()
                     ->sortable()
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('concourse.concourseRate.price')
-                    ->label('Rate')
-                    ->prefix('₱')
-                    ->numeric()
-                    ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('owner.name')
                     ->numeric()
@@ -278,7 +274,7 @@ class TenantResource extends Resource
                     ->label('Lease Term')
                     ->formatStateUsing(fn($state) => $state . ' Months')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: false),
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('lease_status')
                     ->label('Lease Status')
                     ->badge()
@@ -318,42 +314,96 @@ class TenantResource extends Resource
             ->actions([
                 Tables\Actions\Action::make('updateBills')
                     ->label('Update Bills')
-                    ->icon('heroicon-o-arrow-path-rounded-square')
-                    ->color('warning')
+                    ->icon('heroicon-m-currency-dollar')
+                    ->color('primary')
+                    ->requiresConfirmation()
                     ->action(function (Tenant $record) {
-                        DB::transaction(function () use ($record) {
-                            // Reload the record to ensure we have the latest data
-                            $tenant = Tenant::lockForUpdate()->find($record->id);
-                            
-                            if ($tenant) {
-                                $updated = $tenant->updateBillsIfDue();
-                              
-                                if ($updated) {
-                                    Notification::make()
-                                        ->success()
+                        if ($record->lease_due) {
+                            $leaseDate = \Carbon\Carbon::parse($record->lease_due);
+                            $today = \Carbon\Carbon::today();
+                            $sevenDaysBefore = $leaseDate->copy()->subDays(7);
+
+                            if ($today->gte($sevenDaysBefore) || $today->isSameDay($leaseDate)) {
+                                $rentAmount = $record->concourse->concourseRate->price ?? 0;
+                                $bills = $record->bills ?? [];
+                               
+                                $billExists = collect($bills)->contains(function ($bill) use ($leaseDate) {
+                                    return isset($bill['name']) && $bill['name'] == 'Monthly Rent' &&
+                                        isset($bill['for_month']) && $bill['for_month'] == $leaseDate->format('Y-m');
+                                });
+
+                                if (!$billExists) {
+                                    $bills[] = [
+                                        'name' => 'Monthly Rent',
+                                        'amount' => $rentAmount,
+                                        'for_month' => $leaseDate->format('Y-m'),
+                                        'due_date' => $leaseDate->toDateString(),
+                                    ];
+
+                                    $record->bills = $bills;
+                                    $record->monthly_payment =  $rentAmount;;
+                                    $record->lease_status = 'due_soon';
+                                    $record->payment_status = 'pending';
+                                    $record->save();
+
+                                    \Filament\Notifications\Notification::make()
                                         ->title('Bills Updated')
-                                        ->body("Bills for tenant ID {$tenant->id} have been updated successfully.")
+                                        ->success()
                                         ->send();
                                 } else {
-                                    Notification::make()
-                                        ->info()
+                                    \Filament\Notifications\Notification::make()
                                         ->title('No Update Needed')
-                                        ->body("Bills for tenant ID {$tenant->id} are already up to date or it's not time to update yet.")
+                                        ->info()
+                                        ->body('The bill for this lease period already exists.')
                                         ->send();
                                 }
                             } else {
-                                Notification::make()
-                                    ->danger()
-                                    ->title('Update Failed')
-                                    ->body("Unable to find tenant record with ID {$record->id}.")
+                                \Filament\Notifications\Notification::make()
+                                    ->title('No Update Needed')
+                                    ->info()
+                                    ->body('It\'s too early to update the bills for this tenant.')
                                     ->send();
                             }
+                        } else {
+                            \Filament\Notifications\Notification::make()
+                                ->title('Error')
+                                ->danger()
+                                ->body('Lease due date is not set for this tenant.')
+                                ->send();
+                        }
+                    }),
+                Tables\Actions\Action::make('notifyTenant')
+                    ->label('Notify Tenant')
+                    ->icon('heroicon-m-envelope')
+                    ->color('info')
+                    ->action(function (Tenant $record) {
+                        $currentBill = collect($record->bills)->first(function ($bill) {
+                            return $bill['name'] === 'Monthly Rent' &&
+                                Carbon::parse($bill['due_date'])->isPast();
                         });
-                    })
-                    ->requiresConfirmation()
-                    ->modalHeading('Update Bills')
-                    ->modalDescription('Are you sure you want to update the bills for this tenant?')
-                    ->modalSubmitActionLabel('Yes, update bills'),
+
+                        if ($currentBill) {
+                            $user = User::find($record->tenant_id);
+
+                            Notification::make()
+                                ->title('Tenant Notified')
+                                ->success()
+                                ->body("A notification about the current rent bill has been sent to your {$record->concourse->name}.")
+                                ->sendToDatabase($user);
+
+                            Notification::make()
+                                ->title('Tenant Notified')
+                                ->success()
+                                ->body("A notification about the current rent bill has been sent to {$record->concourse->name}.")
+                                ->send();
+                        } else {
+                            Notification::make()
+                                ->title('No Current Bill')
+                                ->warning()
+                                ->body('There is no current monthly rent bill for this tenant.')
+                                ->send();
+                        }
+                    }),
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make()->color('info'),
                     Tables\Actions\EditAction::make()->color('primary'),

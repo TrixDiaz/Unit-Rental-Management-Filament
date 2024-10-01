@@ -3,8 +3,8 @@
 namespace App\Filament\Admin\Resources\TenantResource\Pages;
 
 use App\Filament\Admin\Resources\TenantResource;
-use App\Filament\Admin\Resources\TenantResource\Widgets\MonthlyChart;
 use App\Filament\Admin\Resources\TenantResource\Widgets\TenantsRevenue;
+use App\Filament\Admin\Resources\TenantResource\Widgets\MonthlyChart;
 use App\Filament\Admin\Resources\TenantResource\Widgets\YearlyChart;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
