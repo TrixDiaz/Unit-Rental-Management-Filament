@@ -17,6 +17,7 @@ use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\DB;
 
 class TenantResource extends Resource
 {
@@ -320,21 +321,39 @@ class TenantResource extends Resource
                     ->icon('heroicon-o-arrow-path-rounded-square')
                     ->color('warning')
                     ->action(function (Tenant $record) {
-                        $updated = $record->updateBillsIfDue();
-                        if ($updated) {
-                            Notification::make()
-                                ->success()
-                                ->title('Bills Updated')
-                                ->body('The bills have been updated successfully.')
-                                ->send();
-                        } else {
-                            Notification::make()
-                                ->info()
-                                ->title('No Update Needed')
-                                ->body('The bills are already up to date or it\'s not time to update yet.')
-                                ->send();
-                        }
-                    }),
+                        DB::transaction(function () use ($record) {
+                            // Reload the record to ensure we have the latest data
+                            $tenant = Tenant::lockForUpdate()->find($record->id);
+                            
+                            if ($tenant) {
+                                $updated = $tenant->updateBillsIfDue();
+                              
+                                if ($updated) {
+                                    Notification::make()
+                                        ->success()
+                                        ->title('Bills Updated')
+                                        ->body("Bills for tenant ID {$tenant->id} have been updated successfully.")
+                                        ->send();
+                                } else {
+                                    Notification::make()
+                                        ->info()
+                                        ->title('No Update Needed')
+                                        ->body("Bills for tenant ID {$tenant->id} are already up to date or it's not time to update yet.")
+                                        ->send();
+                                }
+                            } else {
+                                Notification::make()
+                                    ->danger()
+                                    ->title('Update Failed')
+                                    ->body("Unable to find tenant record with ID {$record->id}.")
+                                    ->send();
+                            }
+                        });
+                    })
+                    ->requiresConfirmation()
+                    ->modalHeading('Update Bills')
+                    ->modalDescription('Are you sure you want to update the bills for this tenant?')
+                    ->modalSubmitActionLabel('Yes, update bills'),
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make()->color('info'),
                     Tables\Actions\EditAction::make()->color('primary'),

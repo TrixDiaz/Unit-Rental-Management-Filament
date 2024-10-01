@@ -20,6 +20,9 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
+use Rupadana\FilamentAnnounce\FilamentAnnouncePlugin;
+
+
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -38,7 +41,7 @@ class AdminPanelProvider extends PanelProvider
                 'warning' => Color::Orange,
                 'danger' => Color::Red,
                 'gray' => Color::Gray,
-                
+
             ])
             ->databaseNotifications()
             ->databaseNotificationsPolling('30s')
@@ -56,7 +59,7 @@ class AdminPanelProvider extends PanelProvider
             ->userMenuItems([
                 MenuItem::make()
                     ->label('Tenant Portal')
-                    ->url(fn (): string => route('filament.app.pages.dashboard'))
+                    ->url(fn(): string => route('filament.app.pages.dashboard'))
                     ->icon('heroicon-m-home'),
             ])
             ->middleware([
@@ -75,7 +78,10 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
-                FilamentApexChartsPlugin::make()
+                FilamentApexChartsPlugin::make(),
+                FilamentAnnouncePlugin::make()
+                    ->pollingInterval('30s')
+
             ]);
     }
 }

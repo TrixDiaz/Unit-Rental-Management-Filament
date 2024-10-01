@@ -81,7 +81,7 @@ class Tenant extends Model
             $sevenDaysBefore = $leaseDate->copy()->subDays(7);
 
             // Check if today is 7 days before the lease_due or later
-            if ($today->gte($sevenDaysBefore)) {
+            if ($today->gte($sevenDaysBefore) || $today->isSameDay($leaseDate)) {
                 $rentAmount = $this->concourse->concourseRate->price ?? 0;
 
                 $bills = $this->bills ?? [];
@@ -101,7 +101,7 @@ class Tenant extends Model
                     ];
 
                     $this->bills = $bills;
-                    $this->monthly_payment = $rentAmount;
+                    $this->monthly_payment = collect($bills)->sum('amount');
                     $this->lease_status = 'due_soon';
                     $this->payment_status = 'pending';
                     $this->save();

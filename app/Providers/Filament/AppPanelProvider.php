@@ -21,6 +21,7 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
+use Rupadana\FilamentAnnounce\FilamentAnnouncePlugin;
 
 class AppPanelProvider extends PanelProvider
 {
@@ -71,7 +72,9 @@ class AppPanelProvider extends PanelProvider
             ])
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
-                FilamentApexChartsPlugin::make()
+                FilamentApexChartsPlugin::make(),
+                FilamentAnnouncePlugin::make()
+                ->pollingInterval('30s')
             ]);
     }
 }
