@@ -326,7 +326,7 @@ class TenantResource extends Resource
                             if ($today->gte($sevenDaysBefore) || $today->isSameDay($leaseDate)) {
                                 $rentAmount = $record->concourse->concourseRate->price ?? 0;
                                 $bills = $record->bills ?? [];
-                               
+
                                 $billExists = collect($bills)->contains(function ($bill) use ($leaseDate) {
                                     return isset($bill['name']) && $bill['name'] == 'Monthly Rent' &&
                                         isset($bill['for_month']) && $bill['for_month'] == $leaseDate->format('Y-m');
@@ -350,6 +350,12 @@ class TenantResource extends Resource
                                         ->title('Bills Updated')
                                         ->success()
                                         ->send();
+                                    $user = User::find($record->tenant_id);
+                                    \Filament\Notifications\Notification::make()
+                                        ->title('Bills Updated')
+                                        ->body('The bills for your lease period has been updated.')
+                                        ->success()
+                                        ->sendToDatabase($user);
                                 } else {
                                     \Filament\Notifications\Notification::make()
                                         ->title('No Update Needed')
