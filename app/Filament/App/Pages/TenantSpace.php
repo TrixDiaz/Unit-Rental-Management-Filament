@@ -17,8 +17,8 @@ use App\Mail\PaymentConfirmation;
 use App\Models\Payment;
 use App\Services\ReportForm;
 use App\Models\Report;
-use App\Filament\App\Resources\TenantSpaceResource\Widgets\WaterMonthlyBills;
-use App\Filament\App\Resources\TenantSpaceResource\Widgets\ElectricityMonthlyBills;
+// use App\Filament\App\Resources\TenantSpaceResource\Widgets\WaterMonthlyBills;
+// use App\Filament\App\Resources\TenantSpaceResource\Widgets\ElectricityMonthlyBills;
 
 class TenantSpace extends Page implements HasForms, HasTable
 {
@@ -26,14 +26,16 @@ class TenantSpace extends Page implements HasForms, HasTable
 
     use InteractsWithForms, InteractsWithTable;
 
-    protected function getHeaderWidgets(): array
-    {
-        return [
-            WaterMonthlyBills::class,
-            ElectricityMonthlyBills::class,
-        ];
-    }
+    // protected function getHeaderWidgets(): array
+    // {
+    //     return [
+    //         WaterMonthlyBills::class,
+    //         ElectricityMonthlyBills::class,
+    //     ];
+    // }
 
+    protected static ?string $title = 'Occupied Unit';
+    
     protected static ?string $navigationIcon = 'heroicon-o-home-modern';
 
     protected static string $view = 'filament.app.pages.tenant-space';
@@ -52,11 +54,11 @@ class TenantSpace extends Page implements HasForms, HasTable
                     ->openUrlInNewTab()
             ])
             ->columns([
-                Tables\Columns\TextColumn::make('concourse.name')
-                    ->label('Concourse')
+                Tables\Columns\TextColumn::make('unit.name')
+                    ->label('Unit')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('concourse.unit_number')
+                Tables\Columns\TextColumn::make('unit.unit_number')
                     ->label('Unit Number')
                     ->searchable()
                     ->sortable(),

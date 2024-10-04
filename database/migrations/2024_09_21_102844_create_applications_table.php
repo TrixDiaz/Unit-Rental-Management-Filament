@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('applications', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('concourse_id');
+            $table->unsignedBigInteger('unit_id');
             $table->id();
             $table->string('address')->nullable();
             $table->string('phone_number')->nullable();
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer('lease_term')->nullable();
             $table->string('remarks')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('concourse_id')->references('id')->on('concourses')->onDelete('cascade');
+            $table->foreign('unit_id')->references('id')->on('units')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -413,7 +413,9 @@ class TenantResource extends Resource
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make()->color('info'),
                     Tables\Actions\EditAction::make()->color('primary'),
-                    Tables\Actions\DeleteAction::make()->label('Archive'),
+                    Tables\Actions\DeleteAction::make()
+                        ->label('Archive')
+                        ->modalHeading('Archive Tenant'),
                     Tables\Actions\RestoreAction::make(),
                     Tables\Actions\ForceDeleteAction::make()->label('Permanent Delete'),
                 ])

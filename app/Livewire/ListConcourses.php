@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Models\Concourse;
+use App\Models\Unit;
 use App\Models\User;
 use App\Services\RequirementForm;
 use Livewire\Component;
@@ -22,11 +22,11 @@ class ListConcourses extends Component implements HasTable, HasForms
 {
     use InteractsWithForms, InteractsWithTable;
 
-    public $concourseId;
+    public $unitId;
 
     public function mount()
     {
-        $this->concourseId = request()->query('concourse_id');
+        $this->unitId = request()->query('unit_id');
     }
     public function render()
     {
@@ -36,7 +36,7 @@ class ListConcourses extends Component implements HasTable, HasForms
     public function table(Table $table): Table
     {
         return $table
-            ->query(Concourse::query()->where('is_active', true))
+            ->query(Unit::query()->where('is_active', true))
             ->contentGrid([
                 'md' => 3,
                 'lg' => 4,
@@ -96,7 +96,7 @@ class ListConcourses extends Component implements HasTable, HasForms
                         $application = \App\Models\Application::create([
                             ...$data,
                             'user_id' => Auth::id(),
-                            'concourse_id' => $record->id, // Change this line
+                            'unit_id' => $record->id, // Change this line
                             'status' => 'pending',
                             'lease_term' => $record->lease_term, // Add this line
                         ]);
@@ -117,17 +117,17 @@ class ListConcourses extends Component implements HasTable, HasForms
 
                         // Hide if user already has an application for this space
                         return \App\Models\Application::where('user_id', Auth::id())
-                            ->where('concourse_id', $record->id) // Change this line
+                            ->where('unit_id', $record->id) // Change this line
                             ->exists();
                     }),
                 Tables\Actions\Action::make('Check Application')
                     ->link()
                     ->icon('heroicon-o-pencil')
-                    ->url(fn($record) => route('filament.app.pages.edit-requirement', ['concourse_id' => $record->id, 'user_id' => Auth::id()]))
+                    ->url(fn($record) => route('filament.app.pages.edit-requirement', ['unit_id' => $record->id, 'user_id' => Auth::id()]))
                     ->openUrlInNewTab()
                     ->visible(function ($record) {
                         return \App\Models\Application::where('user_id', Auth::id())
-                            ->where('concourse_id', $record->id)
+                            ->where('unit_id', $record->id)
                             ->where('status', 'pending')
                             ->exists();
                     }),

@@ -2,14 +2,14 @@
 
 namespace App\Filament\App\Pages;
 
-use Filament\Pages\Page;
+use Filament\Pages\Dashboard;
 use Filament\Tables\Table;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Columns\TextColumn;
 use Rupadana\FilamentAnnounce\Models\Announcement;
 
-class AnnouncementDashboard extends Page implements HasTable
+class AnnouncementDashboard extends Dashboard implements HasTable
 {
     use InteractsWithTable;
 

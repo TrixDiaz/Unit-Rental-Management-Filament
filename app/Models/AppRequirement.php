@@ -12,7 +12,7 @@ class AppRequirement extends Model
     protected $fillable = [
         'requirement_id',
         'user_id',
-        'concourse_id',
+        'unit_id',
         'application_id',
         'name',
         'status',

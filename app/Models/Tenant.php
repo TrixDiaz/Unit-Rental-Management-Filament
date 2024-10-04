@@ -14,7 +14,7 @@ class Tenant extends Model
 
     protected $fillable = [
         'tenant_id',
-        'concourse_id',
+        'unit_id',
         'owner_id',
         'lease_start',
         'lease_end',
@@ -39,9 +39,9 @@ class Tenant extends Model
         return $this->belongsTo(User::class, 'tenant_id');
     }
 
-    public function concourse()
+    public function unit()
     {
-        return $this->belongsTo(Concourse::class);
+        return $this->belongsTo(Unit::class);
     }
 
     public function owner()

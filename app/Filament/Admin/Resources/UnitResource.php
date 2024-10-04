@@ -2,10 +2,10 @@
 
 namespace App\Filament\Admin\Resources;
 
-use App\Filament\Admin\Resources\ConcourseResource\Pages;
-use App\Filament\Admin\Resources\ConcourseResource\RelationManagers;
-use App\Models\Concourse;
-use App\Models\ConcourseRate;
+use App\Filament\Admin\Resources\UnitResource\Pages;
+use App\Filament\Admin\Resources\UnitResource\RelationManagers;
+use App\Models\Unit;
+use App\Models\UnitRate;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -18,13 +18,13 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
-class ConcourseResource extends Resource
+class UnitResource extends Resource
 {
     protected static ?string $navigationGroup = 'Unit Settings';
 
     protected static ?string $navigationLabel = 'Units';
 
-    protected static ?string $model = Concourse::class;
+    protected static ?string $model = Unit::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
 
@@ -34,7 +34,7 @@ class ConcourseResource extends Resource
             ->schema([
                 Forms\Components\Grid::make(2)->schema([
                     Forms\Components\Section::make()->schema([
-                        Forms\Components\Section::make('Concourse Details')->schema([
+                        Forms\Components\Section::make('Units Details')->schema([
                             Forms\Components\TextInput::make('address')
                                 ->maxLength(255)
                                 ->required(),
@@ -46,10 +46,9 @@ class ConcourseResource extends Resource
                                     ->required()
                                     ->numeric()
                                     ->maxLength(255),
-                                Forms\Components\Select::make('rate_id')
-                                    ->native(false)
-                                    ->preload()
-                                    ->relationship('concourseRate', 'name')
+                                Forms\Components\TextInput::make('price')
+                                    ->label('Rate')
+                                    ->prefix('₱')
                                     ->required(),
                                 Forms\Components\Select::make('lease_term')
                                     ->options([
@@ -83,7 +82,7 @@ class ConcourseResource extends Resource
                         Forms\Components\Section::make('Attachments')->schema([
                             Forms\Components\FileUpload::make('image')
                                 ->image()
-                                ->label('Concourse Image')
+                                ->label('Unit Image')
                                 ->imageEditor()
                                 ->openable()
                                 ->downloadable(),
@@ -108,7 +107,7 @@ class ConcourseResource extends Resource
                                 ->label('Created at')
                                 ->hiddenOn('create')
                                 ->content(function (\Illuminate\Database\Eloquent\Model $record): String {
-                                    $category = Concourse::find($record->id);
+                                    $category = Unit::find($record->id);
                                     $now = \Carbon\Carbon::now();
 
                                     $diff = $category->created_at->diff($now);
@@ -158,7 +157,7 @@ class ConcourseResource extends Resource
                             Forms\Components\Placeholder::make('updated_at')
                                 ->label('Last modified at')
                                 ->content(function (\Illuminate\Database\Eloquent\Model $record): String {
-                                    $category = Concourse::find($record->id);
+                                    $category = Unit::find($record->id);
                                     $now = \Carbon\Carbon::now();
 
                                     $diff = $category->updated_at->diff($now);
@@ -224,7 +223,7 @@ class ConcourseResource extends Resource
                     ->square()
                     ->width(150)
                     ->height(150)
-                    ->label('Concourse Image')
+                    ->label('Unit Image')
                     ->defaultImageUrl(fn($record) => $record->image === null ? asset('https://placehold.co/600x800') : null),
                 Tables\Columns\TextColumn::make('name')
                     ->sortable()
@@ -232,7 +231,7 @@ class ConcourseResource extends Resource
                 Tables\Columns\TextColumn::make('address')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('concourseRate.price')
+                Tables\Columns\TextColumn::make('UnitRate.price')
                     ->label('Rate')
                     ->money('PHP')
                     ->numeric()
@@ -292,9 +291,9 @@ class ConcourseResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListConcourses::route('/'),
-            'create' => Pages\CreateConcourse::route('/create'),
-            'edit' => Pages\EditConcourse::route('/{record}/edit'),
+            'index' => Pages\ListUnit::route('/'),
+            'create' => Pages\CreateUnit::route('/create'),
+            'edit' => Pages\EditUnit::route('/{record}/edit'),
         ];
     }
 

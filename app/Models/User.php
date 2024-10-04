@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Filament\Facades\Filament;
 
 class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
@@ -19,13 +20,25 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     public function canAccessPanel(Panel $panel): bool
     {
         if ($panel->getId() === 'admin') {
-            return $this->hasRole('super_admin') || $this->hasRole('panel_user');
+            return $this->hasRole('super_admin');
         }
         
-        // Allow access to all other panels (including 'app')
-        return true;
+        if ($panel->getId() === 'app' && $this->hasRole('panel_user')) {
+            return true;
+        } 
+        
+        // Allow access to all other panels
+        return false;
     }
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($user) {
+            $user->assignRole('panel_user');
+        });
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -33,7 +46,8 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'phone_number',
         'gender',

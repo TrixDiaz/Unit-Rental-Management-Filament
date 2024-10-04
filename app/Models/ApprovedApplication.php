@@ -12,7 +12,7 @@ class ApprovedApplication extends Model
     protected $fillable = [
         'user_id',
         'space_id',
-        'concourse_id',
+        'unit_id',
         'business_name',
         'owner_name',
         'email',

@@ -1,29 +1,22 @@
 <?php
 
-namespace App\Filament\Admin\Resources\ConcourseRateResource\Pages;
+namespace App\Filament\Admin\Resources\UnitResource\Pages;
 
-use App\Filament\Admin\Resources\ConcourseRateResource;
-use Filament\Actions;
+use App\Filament\Admin\Resources\UnitResource;
 use Filament\Resources\Pages\EditRecord;
-use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
+use Filament\Notifications\Actions\Action;
 use App\Models\User;
 
-class EditConcourseRate extends EditRecord
+class EditUnit extends EditRecord
 {
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
     }
     
-    protected static string $resource = ConcourseRateResource::class;
+    protected static string $resource = UnitResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\DeleteAction::make(),
-        ];
-    }
 
     protected function getSavedNotification(): ?Notification
     {
@@ -32,8 +25,8 @@ class EditConcourseRate extends EditRecord
         $notification = Notification::make()
             ->success()
             ->icon('heroicon-o-currency-dollar')
-            ->title('Concourse Rate Updated')
-            ->body("Concourse Rate {$record->name} Updated!")
+            ->title('Unit Updated')
+            ->body("Unit {$record->name} address in {$record->address} Updated!")
             ->actions([
                 Action::make('view')
                     ->label('Mark as read')

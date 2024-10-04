@@ -12,7 +12,7 @@ class Application extends Model
 
     protected $fillable = [
         'user_id',
-        'concourse_id',
+        'unit_id',
         'business_name',
         'owner_name',
         'email',
@@ -28,9 +28,9 @@ class Application extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function concourse()
+    public function unit()
     {
-        return $this->belongsTo(Concourse::class);
+        return $this->belongsTo(Unit::class);
     }
 
     public function requirements()

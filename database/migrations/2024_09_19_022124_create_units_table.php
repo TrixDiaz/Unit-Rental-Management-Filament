@@ -11,22 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('concourses', function (Blueprint $table) {
-            $table->unsignedBigInteger('rate_id');
-
+        Schema::create('units', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('address')->nullable();  
             $table->integer('unit_number')->nullable();
             $table->integer('deposit')->nullable();
+            $table->integer('price')->nullable();
             $table->string('status')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
             $table->string('image')->nullable();
             $table->integer('lease_term')->nullable();
             $table->boolean('is_active')->default(true);
-            
-            $table->foreign('rate_id')->references('id')->on('concourse_rates')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -37,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('concourses');
+        Schema::dropIfExists('units');
     }
 };

@@ -11,7 +11,10 @@ class AAStatsOverview extends BaseWidget
     protected function getStats(): array
     {
         $totalRevenue = Payment::where('payment_status', 'paid')->sum('amount');
-        $averagePayment = Payment::where('payment_status', 'paid')->avg('amount');
+        // Calculate annual revenue (payments from the last 365 days)
+        $annualRevenue = Payment::where('payment_status', 'paid')
+            ->where('created_at', '>=', now()->subYear())
+            ->sum('amount');
         $paymentCount = Payment::where('payment_status', 'paid')->count();
 
         return [
@@ -19,9 +22,9 @@ class AAStatsOverview extends BaseWidget
                 ->description('Total completed payments')
                 ->descriptionIcon('heroicon-m-banknotes')
                 ->color('success'),
-            Stat::make('Average Payment', '₱ ' . number_format($averagePayment, 2))
-                ->description('Per completed payment')
-                ->descriptionIcon('heroicon-m-calculator')
+            Stat::make('Annual Revenue', '₱ ' . number_format($annualRevenue, 2))
+                ->description('Total revenue in the last year')
+                ->descriptionIcon('heroicon-m-calendar')
                 ->color('info'),
             Stat::make('Payment Count', $paymentCount)
                 ->description('Total number of payments')

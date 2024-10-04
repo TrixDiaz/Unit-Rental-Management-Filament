@@ -2,8 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Concourse;
-use App\Models\Space;
+use App\Models\Unit;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -18,7 +17,7 @@ class TenantSeeder extends Seeder
     {
         Tenant::create([
             'tenant_id' => User::select('id')->inRandomOrder()->first()->id,
-            'concourse_id' => Concourse::select('id')->inRandomOrder()->first()->id,
+            'unit_id' => Unit::select('id')->inRandomOrder()->first()->id,
             'owner_id' => User::select('id')->inRandomOrder()->first()->id,
             'lease_start' => now(),
             'lease_end' => now()->addYear(),

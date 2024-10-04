@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-class Concourse extends Model
+class Unit extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
         'address',
-        'rate_id',
+        'price',
         'latitude',
         'longitude',
         'image',
@@ -23,11 +23,5 @@ class Concourse extends Model
         'is_active',
     ];
 
-    public function concourseRate()
-    {
-        return $this->belongsTo(ConcourseRate::class, 'rate_id')->where('is_active', true);
-    }
-
- 
 
 }

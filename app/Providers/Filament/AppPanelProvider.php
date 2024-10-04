@@ -34,6 +34,7 @@ class AppPanelProvider extends PanelProvider
             ->passwordReset()
             ->topNavigation()
             ->profile(EditProfile::class)
+            ->default()
             ->pages([
                 AnnouncementDashboard::class,
             ])

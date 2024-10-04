@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('approved_applications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('concourse_id')->constrained('concourses');
+            $table->foreignId('unit_id')->constrained('units');
             $table->string('email');
             $table->string('phone_number');
             $table->text('address');

@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('tenants', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('tenant_id');
-            $table->unsignedBigInteger('concourse_id');
+            $table->unsignedBigInteger('unit_id');
             $table->unsignedBigInteger('owner_id');
             $table->foreign('tenant_id')->references('id')->on('users');
-            $table->foreign('concourse_id')->references('id')->on('concourses');
+            $table->foreign('unit_id')->references('id')->on('units');
             $table->foreign('owner_id')->references('id')->on('users');
             $table->date('lease_start')->nullable();
             $table->date('lease_due')->nullable();
