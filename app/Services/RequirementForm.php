@@ -22,7 +22,11 @@ final class RequirementForm
                 ->default('pending'),
             Forms\Components\Section::make('Tenant Information')
                 ->schema([
-                    Forms\Components\Grid::make(3)->schema([
+                    Forms\Components\Grid::make(2)->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->label('Name')
+                            ->default(fn() => $user->name)
+                            ->readOnly(),
                         Forms\Components\TextInput::make('email')
                             ->label('Email')
                             ->email()

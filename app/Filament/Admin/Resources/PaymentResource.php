@@ -28,6 +28,9 @@ class PaymentResource extends Resource
                 Forms\Components\TextInput::make('tenant_id')
                     ->required()
                     ->numeric(),
+                Forms\Components\TextInput::make('tenant.unit_number')
+                    ->required()
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('amount')
                     ->required()
                     ->numeric(),
@@ -48,6 +51,9 @@ class PaymentResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('tenant.owner.name')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('tenant.unit_number')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('amount')

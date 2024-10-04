@@ -99,7 +99,7 @@ class TenantSpace extends Page implements HasForms, HasTable
             ])
             ->actions([
                 Tables\Actions\Action::make('payBills')
-                    ->label('Pay Bills')
+                    ->label('Bills to Pay')
                     ->button()
                     ->action(fn($record) => $this->payWithGCash($record))
                     ->visible(fn($record) => $record->payment_status !== 'Paid' && $record->monthly_payment > 0),

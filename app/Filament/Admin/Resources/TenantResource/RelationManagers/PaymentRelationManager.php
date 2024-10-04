@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\TenantResource\RelationManagers;
 
+use App\Models\Unit;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -20,6 +21,12 @@ class PaymentRelationManager extends RelationManager
     {
         return $form
             ->schema([
+                Forms\Components\Select::make('unit_number')
+                    ->options(Unit::all()->pluck('unit_number', 'id'))
+                    ->required(),
+                Forms\Components\TextInput::make('amount')
+                    ->numeric()
+                    ->required(),
                 Forms\Components\TextInput::make('payment_type')
                     ->required()
                     ->maxLength(255),
@@ -37,6 +44,8 @@ class PaymentRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('id')
             ->columns([
+                Tables\Columns\TextColumn::make('unit_number')
+                    ->label('Unit Number'),
                 Tables\Columns\TextColumn::make('payment_type'),
                 Tables\Columns\TextColumn::make('payment_method'),
                 Tables\Columns\TextColumn::make('payment_status'),

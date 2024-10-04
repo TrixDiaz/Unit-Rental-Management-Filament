@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Tenant;
+use App\Models\Unit;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Carbon\Carbon;
 
@@ -29,6 +30,7 @@ class PaymentFactory extends Factory
 
         return [
             'tenant_id' => $this->faker->randomElement(Tenant::pluck('id')),
+            'unit_number' => $this->faker->randomElement(Unit::pluck('unit_number')),
             'amount' => collect($paymentDetails)->sum(fn($item) => (int) $item['amount']),
             'payment_details' => json_encode($paymentDetails),
             'payment_method' => $this->faker->randomElement(['maya', 'gcash']),

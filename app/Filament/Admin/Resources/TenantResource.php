@@ -44,9 +44,9 @@ class TenantResource extends Resource
                                 ->preload()
                                 ->required()
                                 ->disabled(),
-                            Forms\Components\Select::make('concourse_id')
-                                ->relationship('concourse', 'name')
-                                ->label('Concourse')
+                            Forms\Components\Select::make('unit_id')
+                                ->relationship('unit', 'name')
+                                ->label('Unit')
                                 ->preload()
                                 ->required()
                                 ->disabled(),
@@ -248,7 +248,7 @@ class TenantResource extends Resource
                     ->numeric()
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('concourse.name')
+                Tables\Columns\TextColumn::make('unit.name')
                     ->numeric()
                     ->sortable()
                     ->searchable()
@@ -324,7 +324,7 @@ class TenantResource extends Resource
                             $sevenDaysBefore = $leaseDate->copy()->subDays(7);
 
                             if ($today->gte($sevenDaysBefore) || $today->isSameDay($leaseDate)) {
-                                $rentAmount = $record->concourse->concourseRate->price ?? 0;
+                                $rentAmount = $record->unit->price ?? 0;
                                 $bills = $record->bills ?? [];
 
                                 $billExists = collect($bills)->contains(function ($bill) use ($leaseDate) {

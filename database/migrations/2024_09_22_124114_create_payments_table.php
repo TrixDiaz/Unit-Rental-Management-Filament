@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('tenant_id');
             $table->integer('amount');
+            $table->string('unit_number');
             $table->string('payment_type');
             $table->string('payment_method');
             $table->string('payment_status');
