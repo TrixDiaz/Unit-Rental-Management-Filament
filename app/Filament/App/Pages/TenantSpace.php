@@ -114,7 +114,7 @@ class TenantSpace extends Page implements HasForms, HasTable
                     ->action(function (array $data, Tenant $record) {
                         Report::create([
                             'landlord_email' => 'admin@example.com',
-                            'unit_number' => $record->concourse->unit_number,
+                            'unit_number' => $record->unit->unit_number,
                             'email' => auth()->user()->email,
                             'phone' => $data['phone'],
                             'issue_type' => $data['issue_type'],
@@ -128,7 +128,7 @@ class TenantSpace extends Page implements HasForms, HasTable
                             ->success()
                             ->send();
                     })
-            ])->poll('30s');
+            ]);
     }
 
     protected function payWithGCash($record)

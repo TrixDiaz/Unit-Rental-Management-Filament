@@ -32,8 +32,8 @@ class ApplicationResource extends Resource
                 Forms\Components\Section::make()
                     ->schema([
                         Forms\Components\Grid::make()->schema([
-                            Forms\Components\Select::make('concourse_id')
-                                ->relationship('concourse', 'name')
+                            Forms\Components\Select::make('unit_id')
+                                ->relationship('unit', 'name')
                                 ->required()
                                 ->searchable()
                                 ->preload()

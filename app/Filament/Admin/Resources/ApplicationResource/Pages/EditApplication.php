@@ -18,6 +18,7 @@ use App\Mail\ContractMail;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use App\Models\Concourse;
+use App\Models\Unit;
 use Illuminate\Support\Facades\View;
 
 class EditApplication extends EditRecord
@@ -69,7 +70,7 @@ class EditApplication extends EditRecord
                         // Create a new Tenant instance
                         $tenant = Tenant::create([
                             'tenant_id' => $application->user_id,
-                            'concourse_id' => $application->concourse_id,
+                            'unit_id' => $application->unit_id,
                             'owner_id' => $application->user_id,
                             'lease_start' => $application->created_at,
                             'lease_due' => Carbon::parse($application->created_at)->addMonths(1),
@@ -82,7 +83,7 @@ class EditApplication extends EditRecord
                         ]);
 
                         // Update the concourse status to 'occupied'
-                        $concourse = Concourse::find($application->concourse_id);
+                        $concourse = Unit::find($application->unit_id);
                         if ($concourse) {
                             $concourse->update(['status' => 'occupied']);
                         }
@@ -111,14 +112,14 @@ class EditApplication extends EditRecord
     protected function sendContractEmail($application, $tenant)
     {
         $user = User::find($application->user_id);
-        $concourse = Concourse::find($application->concourse_id);
+        $concourse = Unit::find($application->unit_id);
         $leaseStart = $tenant->lease_start;
         $leaseEnd = $tenant->lease_end;
 
         // Fetch the price from ConcourseRate
         $price = 0;
-        if ($concourse && $concourse->concourseRate) {
-            $price = $concourse->concourseRate->price;
+        if ($concourse) {
+            $price = $concourse->price;
         }
 
         $contractData = [
@@ -133,7 +134,7 @@ class EditApplication extends EditRecord
             'bills' => json_decode($tenant->bills, true) ?? [],
         ];
 
-       // Mail::to($user->email)->send(new ContractMail($application, $contractData));
+        Mail::to($user->email)->send(new ContractMail($application, $contractData));
 
         Notification::make()
             ->success()
@@ -171,7 +172,7 @@ class EditApplication extends EditRecord
         $selectedUser = User::find($record->user_id);
         if ($selectedUser && $selectedUser->id !== $authUser->id) {
             $url = route('filament.app.pages.edit-requirement', [
-                'concourse_id' => $record->concourse_id,
+                'unit_id' => $record->unit_id,
                 'space_id' => $record->space_id,
                 'user_id' => $record->user_id,
             ]);

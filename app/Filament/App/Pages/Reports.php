@@ -69,6 +69,6 @@ class Reports extends Page implements HasForms, HasTable
                         'resolved' => 'Resolved',
                     ])
             ])
-            ->poll('30s');
+            ->poll('3s');
     }
 }

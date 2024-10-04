@@ -24,7 +24,7 @@ final class RequirementForm
                 ->schema([
                     Forms\Components\Grid::make(2)->schema([
                         Forms\Components\TextInput::make('name')
-                            ->label('Name')
+                            ->label('Full Name')
                             ->default(fn() => $user->name)
                             ->readOnly(),
                         Forms\Components\TextInput::make('email')

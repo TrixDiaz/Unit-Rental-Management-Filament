@@ -132,7 +132,7 @@ class ListConcourses extends Component implements HasTable, HasForms
                             ->exists();
                     }),
             ])
-        ;
+            ->poll('3s');
     }
 
     public function notifyUser(string $title, string $body): void

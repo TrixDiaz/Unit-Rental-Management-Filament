@@ -52,9 +52,6 @@ class UnitResource extends Resource
                                     ->required(),
                                 Forms\Components\Select::make('lease_term')
                                     ->options([
-                                        '1' => '1 month',
-                                        '2' => '2 months',
-                                        '3' => '3 months',
                                         '6' => '6 months',
                                         '12' => '1 year',
                                         '24' => '2 years',
@@ -74,8 +71,7 @@ class UnitResource extends Resource
                                         'occupied' => 'Occupied',
                                         'under_maintenance' => 'Under Maintenance',
                                         'under_renovation' => 'Under Renovation',
-                                    ])
-                                    ->disabledOn('create'),
+                                    ]),
                             ])->columns(2),
                         ]),
 

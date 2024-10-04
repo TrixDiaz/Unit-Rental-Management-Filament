@@ -27,10 +27,10 @@ class EditRequirement extends Page implements Forms\Contracts\HasForms
 
     public function mount(): void
     {
-        $concourseId = request()->query('concourse_id');
+        $concourseId = request()->query('unit_id');
         $userId = Auth::id();
 
-        $this->application = Application::where('concourse_id', $concourseId)
+        $this->application = Application::where('unit_id', $concourseId)
             ->where('user_id', $userId)
             ->firstOrFail();
 
@@ -126,7 +126,7 @@ class EditRequirement extends Page implements Forms\Contracts\HasForms
                         'requirement_id' => $requirementId,
                         'user_id' => Auth::id(),
                         'space_id' => $this->application->space_id,
-                        'concourse_id' => $this->application->concourse_id,
+                        'unit_id' => $this->application->unit_id,
                         'application_id' => $this->application->id,
                         'name' => $this->allRequirements->firstWhere('id', $requirementId)->name,
                         'status' => 'pending',

@@ -22,15 +22,14 @@ final class ReportForm
                     Forms\Components\TextInput::make('unit_number')
                         ->label('Unit')
                         ->required()
-                        ->default($tenant->concourse->unit_number)
+                        ->default($tenant->unit->unit_number)
                         ->disabled()
                         ->numeric()
                         ->integer(), // Ensure the value is an integer
                     Forms\Components\TextInput::make('phone')
                         ->label('Phone')
                         ->required()
-                        ->default(Auth::user()->phone)
-                        ->tel(),
+                        ->default(Auth::user()->phone),
                     Forms\Components\Select::make('issue_type')
                         ->label('Issue Type')
                         ->required()
