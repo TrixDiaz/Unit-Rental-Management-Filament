@@ -34,7 +34,7 @@ class TenantSpace extends Page implements HasForms, HasTable
     //     ];
     // }
 
-    protected static ?string $title = 'Occupied Unit';
+    protected static ?string $title = 'Payments';
     
     protected static ?string $navigationIcon = 'heroicon-o-home-modern';
 
