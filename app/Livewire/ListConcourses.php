@@ -92,14 +92,39 @@ class ListConcourses extends Component implements HasTable, HasForms
                         return RequirementForm::schema($record->id, $record->lease_term);
                     })
                     ->using(function (array $data, $record) {
-                        // Create the application
+                        // Create the application with unit_id included
                         $application = \App\Models\Application::create([
                             ...$data,
+                            'unit_id' => $record->id,
                             'user_id' => Auth::id(),
-                            'unit_id' => $record->id, // Change this line
-                            'status' => 'pending',
-                            'lease_term' => $record->lease_term, // Add this line
+                            'status' => 'pending'
                         ]);
+
+                        // Store the uploaded requirements
+                        if (isset($data['requirements'])) {
+                            foreach ($data['requirements'] as $requirementId => $file) {
+                                if ($file) {
+                                    \App\Models\AppRequirement::create([
+                                        'requirement_id' => $requirementId,
+                                        'user_id' => Auth::id(),
+                                        'unit_id' => $record->id,
+                                        'application_id' => $application->id,
+                                        'name' => \App\Models\Requirement::find($requirementId)->name,
+                                        'status' => 'pending',
+                                        'file' => $file,
+                                    ]);
+                                }
+                            }
+                        }
+
+                        if ($record) {
+                            $record->update([
+                                'user_id' => Auth::id(),
+                                'status' => 'pending'
+                            ]);
+                        }
+
+                        $applicationUrl = route('filament.app.pages.edit-requirement', ['unit_id' => $record->id, 'user_id' => Auth::id()]);
 
                         // Notify the user
                         $this->notifyUser('Application Submitted', 'Your application has been submitted.');
@@ -107,7 +132,13 @@ class ListConcourses extends Component implements HasTable, HasForms
                         // Notify the admin
                         $this->notifyAdmin('New Application', 'A new application has been submitted.');
 
-                        return $application;
+                     // Send email to admin (User with ID 1)
+                    //  $admin = User::find(1);
+                    //  if ($admin) {
+                    //      Mail::to($admin->email)->send(new NewApplicationSubmitted($application));
+                    //  }
+
+                     return $application;
                     })
                     ->hidden(function ($record) {
                         if (!$record) return true; // Hide if no record (shouldn't happen, but just in case)

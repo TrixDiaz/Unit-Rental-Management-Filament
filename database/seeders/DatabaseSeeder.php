@@ -24,10 +24,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(UserSeeder::class);
-        $this->call(UnitSeeder::class);
-        $this->call(ApplicationSeeder::class);
-        $this->call(TenantSeeder::class);
+        // $this->call(UnitSeeder::class);
+        // $this->call(ApplicationSeeder::class);
+        // $this->call(TenantSeeder::class);
         $this->call(RequirementSeeder::class);
-        $this->call(RevenueSeeder::class);
+        // $this->call(RevenueSeeder::class);
     }
 }

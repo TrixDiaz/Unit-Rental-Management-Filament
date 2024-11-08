@@ -12,5 +12,9 @@ class ListConcourses extends Page
 
     protected static string $view = 'filament.app.pages.list-concourses';
 
+    public function getTitle(): string
+    {
+        return 'Units List';
+    }
   
 }

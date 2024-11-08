@@ -134,7 +134,12 @@ class TenantSpace extends Page implements HasForms, HasTable
     protected function payWithGCash($record)
     {
         $total = $record->monthly_payment;
-        $billRecord = $record->bills;
+        $billRecord = $record->bills ?? [];
+
+        // Ensure billRecord is an array before proceeding
+        if (!is_array($billRecord)) {
+            $billRecord = [];
+        }
 
         $lineItems = [];
 
@@ -148,12 +153,23 @@ class TenantSpace extends Page implements HasForms, HasTable
             ];
         }
 
+        // If there are no line items, create one for the total amount
+        if (empty($lineItems)) {
+            $lineItems[] = [
+                'currency' => 'PHP',
+                'amount' => $total * 100,
+                'description' => 'Monthly Rent',
+                'name' => 'Monthly Rent',
+                'quantity' => 1,
+            ];
+        }
+
         $data = [
             'data' => [
                 'attributes' => [
                     'line_items' => $lineItems,
                     'amount_total' => $total * 100,
-                    'payment_method_types' => ['gcash'],
+                    'payment_method_types' => ['gcash','paymaya'],
                     'success_url' => route('filament.app.pages.tenant-space.payment-success', ['record' => $record->id]),
                     'cancel_url' => route('filament.app.pages.tenant-space.payment-cancel'),
                     'description' => 'Payment for monthly rent',
@@ -216,6 +232,7 @@ class TenantSpace extends Page implements HasForms, HasTable
         // Create a new Payment record with bills information
         Payment::create([
             'tenant_id' => $tenant->id,
+            'unit_number' => $tenant->unit->unit_number,
             'amount' => $amountPaid,
             'payment_type' => 'Monthly Rent',
             'payment_details' => json_encode($billsBeforePayment), // Use the stored bills

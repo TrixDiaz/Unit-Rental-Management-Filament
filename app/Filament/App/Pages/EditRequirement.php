@@ -27,10 +27,10 @@ class EditRequirement extends Page implements Forms\Contracts\HasForms
 
     public function mount(): void
     {
-        $concourseId = request()->query('unit_id');
+        $unitId = request()->query('unit_id');
         $userId = Auth::id();
 
-        $this->application = Application::where('unit_id', $concourseId)
+        $this->application = Application::where('unit_id', $unitId)
             ->where('user_id', $userId)
             ->firstOrFail();
 
@@ -81,23 +81,31 @@ class EditRequirement extends Page implements Forms\Contracts\HasForms
                             ->schema(function () {
                                 return $this->allRequirements->map(function ($requirement) {
                                     $appRequirement = $this->appRequirements->firstWhere('requirement_id', $requirement->id);
-                                    return Forms\Components\Group::make([
-                                        Forms\Components\FileUpload::make("requirements.{$requirement->id}")
-                                            ->label($requirement->name)
-                                            ->disk('public')
-                                            ->directory('requirements')
-                                            ->acceptedFileTypes(['application/pdf', 'image/*'])
-                                            ->maxSize(5120),
-                                        Forms\Components\TextInput::make("requirement_status.{$requirement->id}")
-                                            ->label($requirement->name . ' Status')
-                                            ->extraInputAttributes(['class' => 'capitalize'])
-                                            ->disabled(),
-                                    ])->columnSpan(1);
+                                    return Forms\Components\Grid::make(2)
+                                        ->schema([
+                                            Forms\Components\FileUpload::make("requirements.{$requirement->id}")
+                                                ->label('')
+                                                ->disk('public')
+                                                ->directory('requirements')
+                                                ->acceptedFileTypes(['application/pdf', 'image/*'])
+                                                ->maxSize(5120)
+                                                ->openable()
+                                                ->imagePreviewHeight('250')
+                                                ->loadingIndicatorPosition('left')
+                                                ->panelAspectRatio('2:1')
+                                                ->panelLayout('integrated')
+                                                ->removeUploadedFileButtonPosition('right')
+                                                ->uploadButtonPosition('left')
+                                                ->uploadProgressIndicatorPosition('left'),
+                                            Forms\Components\TextInput::make("requirement_status.{$requirement->id}")
+                                                ->label($requirement->name)
+                                                ->extraInputAttributes(['class' => 'capitalize'])
+                                                ->disabled(),
+                                        ]);
                                 })->toArray();
-                            })
-                            ->columns(2),
+                            }),
                     ])
-                    ->columns(3),
+                    ->columns(2),
             ])
             ->statePath('data');
     }
@@ -125,7 +133,6 @@ class EditRequirement extends Page implements Forms\Contracts\HasForms
                     AppRequirement::create([
                         'requirement_id' => $requirementId,
                         'user_id' => Auth::id(),
-                        'space_id' => $this->application->space_id,
                         'unit_id' => $this->application->unit_id,
                         'application_id' => $this->application->id,
                         'name' => $this->allRequirements->firstWhere('id', $requirementId)->name,
