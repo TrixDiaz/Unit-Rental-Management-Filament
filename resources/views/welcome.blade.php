@@ -23,16 +23,29 @@
   </style>
 </head>
 
-<body class="w-full mx-auto text-black text-sm">
+<body class="max-w-[1920px] mx-auto text-black text-sm">
   <div class="bg-white">
-    <header class="py-3 px-4 bg-white z-50 relative">
-      <div class='w-full mx-auto flex justify-between items-center'>
+    <header class="py-4 px-4 sm:px-10 bg-white z-50 relative">
+      <div class='max-w-7xl w-full mx-auto flex flex-wrap items-center gap-4'>
         <a href="javascript:void(0)">
-          <img src="https://i.postimg.cc/cCzFTpTc/rentify-logo-2.png" alt="logo" class='w-32 md:w-40' />
+          <img src="https://i.postimg.cc/cCzFTpTc/rentify-logo-2.png" alt="logo" class='w-40' />
         </a>
 
-        <div id="collapseMenu" class='hidden md:block'>
-          <ul class='flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6 p-4 md:p-0'>
+        <div id="collapseMenu"
+          class='max-lg:hidden lg:!block max-lg:fixed max-lg:before:fixed max-lg:before:bg-black max-lg:before:opacity-40 max-lg:before:inset-0'>
+          <button id="toggleClose" class='lg:hidden fixed top-2 right-4 z-[100] rounded-full bg-white p-3'>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 fill-black" viewBox="0 0 320.591 320.591">
+              <path
+                d="M30.391 318.583a30.37 30.37 0 0 1-21.56-7.288c-11.774-11.844-11.774-30.973 0-42.817L266.643 10.665c12.246-11.459 31.462-10.822 42.921 1.424 10.362 11.074 10.966 28.095 1.414 39.875L51.647 311.295a30.366 30.366 0 0 1-21.256 7.288z"
+                data-original="#000000"></path>
+              <path
+                d="M287.9 318.583a30.37 30.37 0 0 1-21.257-8.806L8.83 51.963C-2.078 39.225-.595 20.055 12.143 9.146c11.369-9.736 28.136-9.736 39.504 0l259.331 257.813c12.243 11.462 12.876 30.679 1.414 42.922-.456.487-.927.958-1.414 1.414a30.368 30.368 0 0 1-23.078 7.288z"
+                data-original="#000000"></path>
+            </svg>
+          </button>
+
+          <ul
+            class='lg:!flex lg:ml-12 lg:space-x-6 max-lg:space-y-6 max-lg:fixed max-lg:bg-white max-lg:w-1/2 max-lg:min-w-[300px] max-lg:top-0 max-lg:left-0 max-lg:p-4 max-lg:h-full max-lg:shadow-md max-lg:overflow-auto z-50'>
             <li class='max-lg:border-b max-lg:pb-4 px-3 lg:hidden'>
               <a href="javascript:void(0)">
                 <!-- <img src="https://readymadeui.com/readymadeui.svg" alt="logo" class='w-40' /> -->
@@ -46,70 +59,84 @@
                     class='hover:text-blue-600 font-semibold block transition-all'>Contact</a></li>
               </ul>
             </li>
-          </ul>
-        </div>
 
-        <div class='flex items-center gap-4'>
+
+        <div class='flex justify-end'>
           <a href="{{ route('filament.app.auth.login') }}">
-            <button class='bg-blue-100 hover:bg-blue-200 text-sm md:text-base rounded-md px-4 py-2 md:px-5 md:py-3'>
-              Get started
+            <button
+            class='bg-blue-100 hover:bg-blue-200 flex items-center transition-all font-semibold rounded-md px-5 py-3'>Get
+            started
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-[14px] fill-current ml-2" viewBox="0 0 492.004 492.004">
+                <path
+                  d="M484.14 226.886 306.46 49.202c-5.072-5.072-11.832-7.856-19.04-7.856-7.216 0-13.972 2.788-19.044 7.856l-16.132 16.136c-5.068 5.064-7.86 11.828-7.86 19.04 0 7.208 2.792 14.2 7.86 19.264L355.9 207.526H26.58C11.732 207.526 0 219.15 0 234.002v22.812c0 14.852 11.732 27.648 26.58 27.648h330.496L252.248 388.926c-5.068 5.072-7.86 11.652-7.86 18.864 0 7.204 2.792 13.88 7.86 18.948l16.132 16.084c5.072 5.072 11.828 7.836 19.044 7.836 7.208 0 13.968-2.8 19.04-7.872l177.68-177.68c5.084-5.088 7.88-11.88 7.86-19.1.016-7.244-2.776-14.04-7.864-19.12z"
+                  data-original="#000000" />
+              </svg>
             </button>
           </a>
+          <button id="toggleOpen" class='lg:hidden ml-7'>
+            <svg class="w-7 h-7" fill="#000" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                clip-rule="evenodd"></path>
+            </svg>
+          </button>
         </div>
     </header>
 
-    <div class="min-h-[400px] md:min-h-[560px] bg-blue-100 px-4">
-      <div class="w-full mx-auto py-8 md:py-16">
-        <div class="grid md:grid-cols-2 gap-6 md:gap-10">
-          <div class="text-center md:text-left">
-            <h1 class="text-3xl md:text-5xl font-bold mb-4 md:mb-6">Welcome to Rentify</h1>
-            <p class="text-sm md:text-base leading-relaxed">
-              Rentify is a comprehensive platform that connects landlord and tenants,
-              making it easier to find, rent, and manage apartment units.
-              we are commited to providing seamless experience for both landlord and tenants,
-              ensuring that everyone can find the perfect place to call home.
-            </p>
-          </div>
-          <div class="mt-8 md:mt-0">
-            <img src="https://i.postimg.cc/cCzFTpTc/rentify-logo-2.png" alt="Rentify Logo" 
-                 class="w-full max-w-[400px] md:max-w-[600px] mx-auto"/>
-          </div>
-        </div>
-      </div>
+    <div class="flex items-center justify-center min-h-screen bg-blue-100 px-4 sm:px-10">
+  <div class="max-w-2xl w-full text-center mx-auto py-16">
+    <h1 class="md:text-5xl text-4xl font-bold mb-6 md:!leading-[55px]">Welcome to Rentify</h1>
+    <p class="text-base leading-relaxed">
+      Rentify is a comprehensive platform that connects landlords and tenants, making it easier to find, rent, and manage apartment units. We are committed to providing a seamless experience for both landlords and tenants, ensuring that everyone can find the perfect place to call home.
+    </p>
+    <div class="flex flex-wrap gap-y-4 gap-x-8 mt-8 justify-center">
+      <!-- Uncomment and update the code below if you'd like to add a button -->
+      <!-- <a href="{{ route('filament.app.auth.login') }}">
+        <button class="bg-black hover:bg-[#222] text-white flex items-center transition-all font-semibold rounded-md px-5 py-4">
+          Get started
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-[14px] fill-current ml-2" viewBox="0 0 492.004 492.004">
+            <path d="M484.14 226.886L306.46 49.202c-5.072-5.072-11.832-7.856-19.04-7.856-7.216 0-13.972 2.788-19.044 7.856l-16.132 16.136c-5.068 5.064-7.86 11.828-7.86 19.04 0 7.208 2.792 14.2 7.86 19.264L355.9 207.526H26.58C11.732 207.526 0 219.15 0 234.002v22.812c0 14.852 11.732 27.648 26.58 27.648h330.496L252.248 388.926c-5.068 5.072-7.86 11.652-7.86 18.864 0 7.204 2.792 13.88 7.86 18.948l16.132 16.084c5.072 5.072 11.828 7.836 19.044 7.836 7.208 0 13.968-2.8 19.04-7.872l177.68-177.68c5.084-5.088 7.88-11.88 7.86-19.1.016-7.244-2.776-14.04-7.864-19.12z" data-original="#000000"/>
+          </svg>
+        </button>
+      </a> -->
     </div>
+  </div>
+</div>
 
-    <div class="px-4 mt-16 md:mt-28">
-      <div class="w-full mx-auto">
-        <div class="grid md:grid-cols-2 gap-8 md:gap-10">
-          <div class="w-full h-full">
-            <!-- Update the image source here -->
-            <img src="https://i.postimg.cc/JzN8gmbb/459311168-1470425000335690-1337247734429533546-n.jpg" alt="Premium Benefits" class="w-full h-full object-cover" />
-          </div>
-          <div>
-            <h2 class="md:text-4xl text-3xl font-semibold mb-6">Simplify Apartment Management with Rentify</h2>
-            <p>Rentify is designed for landlords who want an efficient, modern way to manage their properties and assist tenants.
-              Created with the needs of Tamondong Apartment in GMA in mind, Rentify streamlines tenant information collection,
-              allowing landlords to access essential tenant details, rental agreements, and contact information  
-              all from one easy to use online platform.</p>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <div class="px-4 mt-16 md:mt-28">
-      <div class="w-full mx-auto grid md:grid-cols-2 justify-center items-center gap-10">
-        <div>
-          <h2 class="md:text-4xl text-3xl font-semibold mb-6">Effortless Communication and Payments</h2>
-          <p>With Rentify, landlords can notify tenants of monthly dues, send out important announcements,
-            and even track monthly earnings from the dashboard. Tenants benefit from streamlined monthly bill payments and instant access to building updates,
-            creating a seamless experience for everyone involved.</p>
-        </div>
-        <div class="w-full h-full">
-          <!-- Update the image source here -->
-          <img src="https://i.postimg.cc/v8KGx0Y6/459307121-387859467537207-4357016819024262553-n.jpg" alt="feature" class="w-full h-full object-cover" />
-        </div>
+
+    <div class="px-4 sm:px-10 mt-28">
+  <div class="max-w-7xl w-full mx-auto">
+    <div class="grid md:grid-cols-2 items-center gap-10">
+      <div class="w-full h-full">
+        <!-- Update the image source here -->
+        <img src="https://i.postimg.cc/gkR858Z5/FOR-RENT.jpg" alt="Premium Benefits" class="w-full h-full object-cover" />
+      </div>
+      <div>
+        <h2 class="md:text-4xl text-3xl font-semibold mb-6">Simplify Apartment Management with Rentify</h2>
+        <p>Rentify is designed for landlords who want an efficient, modern way to manage their properties and assist tenants.
+          Created with the needs of Tamondong Apartment in GMA in mind, Rentify streamlines tenant information collection,
+          allowing landlords to access essential tenant details, rental agreements, and contact information  
+          all from one easy to use online platform.</p>
       </div>
     </div>
+  </div>
+</div>
+
+<div class="px-4 sm:px-10 mt-28">
+  <div class="max-w-7xl w-full mx-auto grid md:grid-cols-2 justify-center items-center gap-10">
+    <div>
+      <h2 class="md:text-4xl text-3xl font-semibold mb-6">Effortless Communication and Payments</h2>
+      <p>With Rentify, landlords can notify tenants of monthly dues, send out important announcements,
+        and even track monthly earnings from the dashboard. Tenants benefit from streamlined monthly bill payments and instant access to building updates,
+        creating a seamless experience for everyone involved.</p>
+    </div>
+    <div class="w-full h-full">
+      <!-- Update the image source here -->
+      <img src="https://i.postimg.cc/kMs9FXwb/Untitled-design-1.jpg" alt="feature" class="w-full h-full object-cover" />
+    </div>
+  </div>
+</div>
 
     <div class="mt-28 px-4 sm:px-10 bg-blue-100">
       <div
@@ -118,10 +145,23 @@
         <p>Adaptable and scalable, Rentify is here to meet the evolving needs of landlords and tenants alike.
            Simplify your apartment management process with Rentify and focus on what matters most a well-managed,
             thriving residential community.</p>
+        <!-- <a href="{{ route('filament.app.auth.login') }}">
+          <button
+            class="bg-black hover:bg-[#222] text-white flex items-center transition-all font-semibold rounded-md px-5 py-4 mt-8">
+            Get started
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-[14px] fill-current ml-2" viewBox="0 0 492.004 492.004">
+              <path
+                d="M484.14 226.886 306.46 49.202c-5.072-5.072-11.832-7.856-19.04-7.856-7.216 0-13.972 2.788-19.044 7.856l-16.132 16.136c-5.068 5.064-7.86 11.828-7.86 19.04 0 7.208 2.792 14.2 7.86 19.264L355.9 207.526H26.58C11.732 207.526 0 219.15 0 234.002v22.812c0 14.852 11.732 27.648 26.58 27.648h330.496L252.248 388.926c-5.068 5.072-7.86 11.652-7.86 18.864 0 7.204 2.792 13.88 7.86 18.948l16.132 16.084c5.072 5.072 11.828 7.836 19.044 7.836 7.208 0 13.968-2.8 19.04-7.872l177.68-177.68c5.084-5.088 7.88-11.88 7.86-19.1.016-7.244-2.776-14.04-7.864-19.12z"
+                data-original="#000000"></path>
+            </svg>
+          </button>
+        </a> -->
       </div>
     </div>
 
-    <div class="mt-16 md:mt-28 px-4">
+
+
+    <div class="mt-28 px-4 sm:px-10">
       <div class="max-w-7xl mx-auto space-y-6">
         <div class="mb-10">
           <h2 class="md:text-4xl text-3xl font-semibold mb-6">Frequently Asked Questions</h2>
@@ -187,34 +227,62 @@
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Footer -->
-    <footer class="bg-gray-50 mt-16 md:mt-28">
-      <div class="mx-auto grid gap-8 px-4 py-8 md:grid-cols-2 lg:grid-cols-4">
-        <div class="max-w-sm">
-          <div class="mb-6 flex h-12 items-center space-x-2">
-          </div>
-        <div class="">
-          <div class="mt-4 mb-2 font-medium xl:mb-4">Address</div>
-          <div class="text-gray-500">
-            Sorsogon Street, <br />
-            Barangay Maderan, <br />
-            General Mariano Alvarez, Cavite
-          </div>
+  <!-- <div class="mt-28 px-4 sm:px-10">
+    <div class="max-w-7xl mx-auto bg-gradient-to-r from-teal-700 via-teal-600 to-teal-700 py-16 px-6 relative">
+      <div class="max-w-2xl mx-auto text-center">
+        <h2 class="md:text-4xl text-3xl font-semibold mb-6 text-white">Subscribe to Our Newsletter</h2>
+        <div class="my-6">
+          <p class="text-white">Subscribe to our newsletter and stay up to date with the latest news, updates, and
+            exclusive offers. Get
+            valuable insights. Join our community today!</p>
         </div>
-          </div>
+        <div
+          class="max-w-2xl left-0 right-0 mx-auto w-full bg-white p-5 flex items-center shadow-lg absolute -bottom-10 rounded-md">
+          <input type="email" placeholder="Enter your email"
+            class="w-full bg-gray-50 py-3.5 px-4 text-base focus:outline-none" />
+          <button
+            class="bg-black hover:bg-[#222] text-white flex items-center transition-all font-semibold px-5 py-4">
+            Subscribe
+          </button>
         </div>
       </div>
-      <div class="bg-gray-100">
-        <div class="mx-auto flex max-w-screen-xl flex-col gap-y-4 px-4 py-3 text-center text-gray-500 sm:flex-row sm:justify-between sm:text-left">
-          <div class="">© 2024 Rentify | All Rights Reserved</div>
-          <div class="">
+    </div>
+  </div> -->
 
-            <span>|</span>
-          </div>
+<!-- Footer -->
+
+
+<footer class="bg-gray-50">
+  <div class="mx-auto grid max-w-screen-xl gap-y-8 gap-x-12 px-4 py-10 md:grid-cols-2 xl:grid-cols-4 xl:px-10">
+    <div class="max-w-sm">
+      <div class="mb-6 flex h-12 items-center space-x-2">
+      </div>
+      <div class="">
+        <div class="mt-4 mb-2 font-medium xl:mb-4">Address</div>
+        <div class="text-gray-500">
+          Sorsogon Street, <br />
+          Barangay Maderan, <br />
+          General Mariano Alvarez, Cavite
         </div>
       </div>
-    </footer>
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class="border-t border-gray-300 my-4"></div>
+
+  <div class="bg-gray-100">
+    <div class="mx-auto flex max-w-screen-xl flex-col gap-y-4 px-4 py-3 text-center text-gray-500 sm:flex-row sm:justify-between sm:text-left">
+      <div class="">© 2024 Rentify | All Rights Reserved</div>
+      <div class="">
+        <span>|</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
   </div>
 
   <script>
