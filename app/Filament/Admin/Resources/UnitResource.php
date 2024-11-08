@@ -227,7 +227,7 @@ class UnitResource extends Resource
                 Tables\Columns\TextColumn::make('address')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('UnitRate.price')
+                Tables\Columns\TextColumn::make('price')
                     ->label('Rate')
                     ->money('PHP')
                     ->numeric()
