@@ -26,9 +26,9 @@
 <body class="max-w-[1920px] mx-auto text-black text-sm">
   <div class="bg-white">
     <header class="py-4 px-4 sm:px-10 bg-white z-50 relative">
-      <div class='max-w-7xl w-full mx-auto flex flex-wrap items-center gap-4'>
-        <a href="javascript:void(0)">
-          <img src="https://i.postimg.cc/cCzFTpTc/rentify-logo-2.png" alt="logo" class='w-40' />
+      <div class='max-w-7xl w-full mx-auto flex flex-col sm:flex-row justify-between items-center gap-4'>
+        <a href="javascript:void(0)" class="w-40 sm:w-48">
+          <img src="https://i.postimg.cc/cCzFTpTc/rentify-logo-2.png" alt="logo" class='w-full' />
         </a>
 
         <div id="collapseMenu"
@@ -61,90 +61,91 @@
             </li>
 
 
-        <div class='flex justify-end'>
-          <a href="{{ route('filament.app.auth.login') }}">
-            <button
-            class='bg-blue-100 hover:bg-blue-200 flex items-center transition-all font-semibold rounded-md px-5 py-3'>Get
-            started
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-[14px] fill-current ml-2" viewBox="0 0 492.004 492.004">
-                <path
-                  d="M484.14 226.886 306.46 49.202c-5.072-5.072-11.832-7.856-19.04-7.856-7.216 0-13.972 2.788-19.044 7.856l-16.132 16.136c-5.068 5.064-7.86 11.828-7.86 19.04 0 7.208 2.792 14.2 7.86 19.264L355.9 207.526H26.58C11.732 207.526 0 219.15 0 234.002v22.812c0 14.852 11.732 27.648 26.58 27.648h330.496L252.248 388.926c-5.068 5.072-7.86 11.652-7.86 18.864 0 7.204 2.792 13.88 7.86 18.948l16.132 16.084c5.072 5.072 11.828 7.836 19.044 7.836 7.208 0 13.968-2.8 19.04-7.872l177.68-177.68c5.084-5.088 7.88-11.88 7.86-19.1.016-7.244-2.776-14.04-7.864-19.12z"
-                  data-original="#000000" />
-              </svg>
-            </button>
-          </a>
-          <button id="toggleOpen" class='lg:hidden ml-7'>
-            <svg class="w-7 h-7" fill="#000" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd"
-                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                clip-rule="evenodd"></path>
-            </svg>
-          </button>
-        </div>
+            <div class='flex justify-end w-full sm:w-auto'>
+              <a href="{{ route('filament.app.auth.login') }}">
+                <button class='w-full sm:w-auto bg-blue-100 hover:bg-blue-200 flex items-center transition-all font-semibold rounded-md px-4 sm:px-5 py-2 sm:py-3'>
+                  Get started
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-[14px] fill-current ml-2" viewBox="0 0 492.004 492.004">
+                    <path
+                      d="M484.14 226.886 306.46 49.202c-5.072-5.072-11.832-7.856-19.04-7.856-7.216 0-13.972 2.788-19.044 7.856l-16.132 16.136c-5.068 5.064-7.86 11.828-7.86 19.04 0 7.208 2.792 14.2 7.86 19.264L355.9 207.526H26.58C11.732 207.526 0 219.15 0 234.002v22.812c0 14.852 11.732 27.648 26.58 27.648h330.496L252.248 388.926c-5.068 5.072-7.86 11.652-7.86 18.864 0 7.204 2.792 13.88 7.86 18.948l16.132 16.084c5.072 5.072 11.828 7.836 19.044 7.836 7.208 0 13.968-2.8 19.04-7.872l177.68-177.68c5.084-5.088 7.88-11.88 7.86-19.1.016-7.244-2.776-14.04-7.864-19.12z"
+                      data-original="#000000" />
+                  </svg>
+                </button>
+              </a>
+              <button id="toggleOpen" class='lg:hidden ml-7'>
+                <svg class="w-7 h-7" fill="#000" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd"
+                    d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                    clip-rule="evenodd"></path>
+                </svg>
+              </button>
+            </div>
     </header>
 
-    <div class="flex items-center justify-center min-h-screen bg-blue-100 px-4 sm:px-10">
-  <div class="max-w-2xl w-full text-center mx-auto py-16">
-    <h1 class="md:text-5xl text-4xl font-bold mb-6 md:!leading-[55px]">Welcome to Rentify</h1>
-    <p class="text-base leading-relaxed">
-      Rentify is a comprehensive platform that connects landlords and tenants, making it easier to find, rent, and manage apartment units. We are committed to providing a seamless experience for both landlords and tenants, ensuring that everyone can find the perfect place to call home.
-    </p>
-    <div class="flex flex-wrap gap-y-4 gap-x-8 mt-8 justify-center">
-      <!-- Uncomment and update the code below if you'd like to add a button -->
-      <!-- <a href="{{ route('filament.app.auth.login') }}">
-        <button class="bg-black hover:bg-[#222] text-white flex items-center transition-all font-semibold rounded-md px-5 py-4">
-          Get started
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-[14px] fill-current ml-2" viewBox="0 0 492.004 492.004">
-            <path d="M484.14 226.886L306.46 49.202c-5.072-5.072-11.832-7.856-19.04-7.856-7.216 0-13.972 2.788-19.044 7.856l-16.132 16.136c-5.068 5.064-7.86 11.828-7.86 19.04 0 7.208 2.792 14.2 7.86 19.264L355.9 207.526H26.58C11.732 207.526 0 219.15 0 234.002v22.812c0 14.852 11.732 27.648 26.58 27.648h330.496L252.248 388.926c-5.068 5.072-7.86 11.652-7.86 18.864 0 7.204 2.792 13.88 7.86 18.948l16.132 16.084c5.072 5.072 11.828 7.836 19.044 7.836 7.208 0 13.968-2.8 19.04-7.872l177.68-177.68c5.084-5.088 7.88-11.88 7.86-19.1.016-7.244-2.776-14.04-7.864-19.12z" data-original="#000000"/>
-          </svg>
-        </button>
-      </a> -->
-    </div>
-  </div>
-</div>
+    <div class="flex items-center justify-center min-h-[60vh] sm:min-h-screen bg-blue-100 px-4 sm:px-10">
+      <div class="max-w-2xl w-full text-center mx-auto py-8 sm:py-16">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 leading-tight sm:leading-[55px]">Welcome to Rentify</h1>
+        <p class="text-base leading-relaxed">
+          Rentify is a comprehensive platform that connects landlords and tenants, making it easier to find, rent, and manage apartment units. We are committed to providing a seamless experience for both landlords and tenants, ensuring that everyone can find the perfect place to call home.
+        </p>
 
-
-
-    <div class="px-4 sm:px-10 mt-28">
-  <div class="max-w-7xl w-full mx-auto">
-    <div class="grid md:grid-cols-2 items-center gap-10">
-      <div class="w-full h-full">
-        <!-- Update the image source here -->
-        <img src="https://i.postimg.cc/gkR858Z5/FOR-RENT.jpg" alt="Premium Benefits" class="w-full h-full object-cover" />
-      </div>
-      <div>
-        <h2 class="md:text-4xl text-3xl font-semibold mb-6">Simplify Apartment Management with Rentify</h2>
-        <p>Rentify is designed for landlords who want an efficient, modern way to manage their properties and assist tenants.
-          Created with the needs of Tamondong Apartment in GMA in mind, Rentify streamlines tenant information collection,
-          allowing landlords to access essential tenant details, rental agreements, and contact information  
-          all from one easy to use online platform.</p>
+       
+          <div class='flex justify-center items-center border border-black rounded-md w-ful sm:w-auto mt-4'>
+            <a href="{{ route('filament.app.auth.login') }}">
+              <button class='w-full sm:w-auto bg-blue-100 hover:bg-blue-200 flex items-center transition-all font-semibold rounded-md px-4 sm:px-5 py-2 sm:py-3'>
+                Get started
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-[14px] fill-current ml-2" viewBox="0 0 492.004 492.004">
+                  <path
+                    d="M484.14 226.886 306.46 49.202c-5.072-5.072-11.832-7.856-19.04-7.856-7.216 0-13.972 2.788-19.044 7.856l-16.132 16.136c-5.068 5.064-7.86 11.828-7.86 19.04 0 7.208 2.792 14.2 7.86 19.264L355.9 207.526H26.58C11.732 207.526 0 219.15 0 234.002v22.812c0 14.852 11.732 27.648 26.58 27.648h330.496L252.248 388.926c-5.068 5.072-7.86 11.652-7.86 18.864 0 7.204 2.792 13.88 7.86 18.948l16.132 16.084c5.072 5.072 11.828 7.836 19.044 7.836 7.208 0 13.968-2.8 19.04-7.872l177.68-177.68c5.084-5.088 7.88-11.88 7.86-19.1.016-7.244-2.776-14.04-7.864-19.12z"
+                    data-original="#000000" />
+                </svg>
+              </button>
+            </a>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-<div class="px-4 sm:px-10 mt-28">
-  <div class="max-w-7xl w-full mx-auto grid md:grid-cols-2 justify-center items-center gap-10">
-    <div>
-      <h2 class="md:text-4xl text-3xl font-semibold mb-6">Effortless Communication and Payments</h2>
-      <p>With Rentify, landlords can notify tenants of monthly dues, send out important announcements,
-        and even track monthly earnings from the dashboard. Tenants benefit from streamlined monthly bill payments and instant access to building updates,
-        creating a seamless experience for everyone involved.</p>
-    </div>
-    <div class="w-full h-full">
-      <!-- Update the image source here -->
-      <img src="https://i.postimg.cc/kMs9FXwb/Untitled-design-1.jpg" alt="feature" class="w-full h-full object-cover" />
-    </div>
-  </div>
-</div>
 
-    <div class="mt-28 px-4 sm:px-10 bg-blue-100">
+
+    <div class="px-4 sm:px-10 mt-16 sm:mt-28">
+      <div class="max-w-7xl w-full mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-6 sm:gap-10">
+          <div class="w-full h-48 sm:h-64 md:h-full">
+            <img src="https://i.postimg.cc/gkR858Z5/FOR-RENT.jpg" alt="Premium Benefits" class="w-full h-full object-cover rounded-lg" />
+          </div>
+          <div>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-semibold mb-4 sm:mb-6">Simplify Apartment Management with Rentify</h2>
+            <p>Rentify is designed for landlords who want an efficient, modern way to manage their properties and assist tenants.
+              Created with the needs of Tamondong Apartment in GMA in mind, Rentify streamlines tenant information collection,
+              allowing landlords to access essential tenant details, rental agreements, and contact information
+              all from one easy to use online platform.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-4 sm:px-10 mt-16 sm:mt-28">
+      <div class="max-w-7xl w-full mx-auto grid md:grid-cols-2 justify-center items-center gap-10">
+        <div>
+          <h2 class="md:text-4xl text-3xl font-semibold mb-6">Effortless Communication and Payments</h2>
+          <p>With Rentify, landlords can notify tenants of monthly dues, send out important announcements,
+            and even track monthly earnings from the dashboard. Tenants benefit from streamlined monthly bill payments and instant access to building updates,
+            creating a seamless experience for everyone involved.</p>
+        </div>
+        <div class="w-full h-full">
+          <!-- Update the image source here -->
+          <img src="https://i.postimg.cc/kMs9FXwb/Untitled-design-1.jpg" alt="feature" class="w-full h-full object-cover" />
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-16 sm:mt-28 px-4 sm:px-10 bg-blue-100">
       <div
         class="min-h-[400px] relative h-full max-w-2xl mx-auto flex flex-col justify-center items-center text-center px-6 py-16">
         <h2 class="md:text-4xl text-3xl font-semibold mb-6">Built for the Future of Apartment Management</h2>
         <p>Adaptable and scalable, Rentify is here to meet the evolving needs of landlords and tenants alike.
-           Simplify your apartment management process with Rentify and focus on what matters most a well-managed,
-            thriving residential community.</p>
+          Simplify your apartment management process with Rentify and focus on what matters most a well-managed,
+          thriving residential community.</p>
         <!-- <a href="{{ route('filament.app.auth.login') }}">
           <button
             class="bg-black hover:bg-[#222] text-white flex items-center transition-all font-semibold rounded-md px-5 py-4 mt-8">
@@ -161,10 +162,10 @@
 
 
 
-    <div class="mt-28 px-4 sm:px-10">
-      <div class="max-w-7xl mx-auto space-y-6">
-        <div class="mb-10">
-          <h2 class="md:text-4xl text-3xl font-semibold mb-6">Frequently Asked Questions</h2>
+    <div class="mt-16 sm:mt-28 px-4 sm:px-10">
+      <div class="max-w-7xl mx-auto space-y-4 sm:space-y-6">
+        <div class="mb-6 sm:mb-10">
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-semibold mb-4 sm:mb-6">Frequently Asked Questions</h2>
           <p>Explore common questions and find answers to help you make the most out of our services. If you don't see
             your question here, feel free to contact us for assistance.</p>
         </div>
@@ -223,13 +224,13 @@
             </button>
             <div x-show="activeIndex === 0" x-collapse>
               <p class="mt-2">If you need to terminate your lease early, please contact the landlord as soon as possible. </p>
-          <!-- Add more FAQ items following the same pattern -->
+              <!-- Add more FAQ items following the same pattern -->
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- <div class="mt-28 px-4 sm:px-10">
+      <!-- <div class="mt-28 px-4 sm:px-10">
     <div class="max-w-7xl mx-auto bg-gradient-to-r from-teal-700 via-teal-600 to-teal-700 py-16 px-6 relative">
       <div class="max-w-2xl mx-auto text-center">
         <h2 class="md:text-4xl text-3xl font-semibold mb-6 text-white">Subscribe to Our Newsletter</h2>
@@ -251,86 +252,86 @@
     </div>
   </div> -->
 
-<!-- Footer -->
+      <!-- Footer -->
 
 
-<footer class="bg-gray-50">
-  <div class="mx-auto grid max-w-screen-xl gap-y-8 gap-x-12 px-4 py-10 md:grid-cols-2 xl:grid-cols-4 xl:px-10">
-    <div class="max-w-sm">
-      <div class="mb-6 flex h-12 items-center space-x-2">
-      </div>
-      <div class="">
-        <div class="mt-4 mb-2 font-medium xl:mb-4">Address</div>
-        <div class="text-gray-500">
-          Sorsogon Street, <br />
-          Barangay Maderan, <br />
-          General Mariano Alvarez, Cavite
+      <footer class="bg-gray-50 mt-16 sm:mt-28">
+        <div class="mx-auto grid max-w-screen-xl gap-6 sm:gap-y-8 sm:gap-x-12 px-4 py-8 sm:py-10 grid-cols-1 md:grid-cols-2 xl:grid-cols-4 xl:px-10">
+          <div class="max-w-sm">
+            <div class="mb-6 flex h-12 items-center space-x-2">
+            </div>
+            <div class="">
+              <div class="mt-4 mb-2 font-medium xl:mb-4">Address</div>
+              <div class="text-gray-500">
+                Sorsogon Street, <br />
+                Barangay Maderan, <br />
+                General Mariano Alvarez, Cavite
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+
+        <!-- Divider -->
+        <div class="border-t border-gray-300 my-4"></div>
+
+        <div class="bg-gray-100">
+          <div class="mx-auto flex max-w-screen-xl flex-col sm:flex-row gap-y-2 sm:gap-y-4 px-4 py-3 text-center text-gray-500 sm:justify-between sm:text-left">
+            <div class="">© 2024 Rentify | All Rights Reserved</div>
+            <div class="">
+              <span>|</span>
+            </div>
+          </div>
+        </div>
+      </footer>
+
     </div>
-  </div>
 
-  <!-- Divider -->
-  <div class="border-t border-gray-300 my-4"></div>
+    <script>
+      var toggleOpen = document.getElementById('toggleOpen');
+      var toggleClose = document.getElementById('toggleClose');
+      var collapseMenu = document.getElementById('collapseMenu');
 
-  <div class="bg-gray-100">
-    <div class="mx-auto flex max-w-screen-xl flex-col gap-y-4 px-4 py-3 text-center text-gray-500 sm:flex-row sm:justify-between sm:text-left">
-      <div class="">© 2024 Rentify | All Rights Reserved</div>
-      <div class="">
-        <span>|</span>
-      </div>
-    </div>
-  </div>
-</footer>
-
-  </div>
-
-  <script>
-    var toggleOpen = document.getElementById('toggleOpen');
-    var toggleClose = document.getElementById('toggleClose');
-    var collapseMenu = document.getElementById('collapseMenu');
-
-    function handleClick() {
-      if (collapseMenu.style.display === 'block') {
-        collapseMenu.style.display = 'none';
-      } else {
-        collapseMenu.style.display = 'block';
+      function handleClick() {
+        if (collapseMenu.style.display === 'block') {
+          collapseMenu.style.display = 'none';
+        } else {
+          collapseMenu.style.display = 'block';
+        }
       }
-    }
 
-    toggleOpen.addEventListener('click', handleClick);
-    toggleClose.addEventListener('click', handleClick);
+      toggleOpen.addEventListener('click', handleClick);
+      toggleClose.addEventListener('click', handleClick);
 
-    // Add this new code for FAQ functionality
-    document.addEventListener('DOMContentLoaded', function() {
-      const faqContainer = document.getElementById('faqContainer');
+      // Add this new code for FAQ functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        const faqContainer = document.getElementById('faqContainer');
 
-      faqContainer.addEventListener('click', function(e) {
-        if (e.target.classList.contains('faq-question')) {
-          const answer = e.target.nextElementSibling;
-          const icon = e.target.querySelector('svg');
+        faqContainer.addEventListener('click', function(e) {
+          if (e.target.classList.contains('faq-question')) {
+            const answer = e.target.nextElementSibling;
+            const icon = e.target.querySelector('svg');
 
-          answer.classList.toggle('hidden');
-          icon.style.transform = answer.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(45deg)';
-        }
+            answer.classList.toggle('hidden');
+            icon.style.transform = answer.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(45deg)';
+          }
+        });
       });
-    });
 
-    // Add this new code for FAQ functionality
-    document.addEventListener('DOMContentLoaded', function() {
-      const faqContainer = document.getElementById('faqContainer');
+      // Add this new code for FAQ functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        const faqContainer = document.getElementById('faqContainer');
 
-      faqContainer.addEventListener('click', function(e) {
-        if (e.target.classList.contains('faq-question')) {
-          const answer = e.target.nextElementSibling;
-          const icon = e.target.querySelector('svg');
+        faqContainer.addEventListener('click', function(e) {
+          if (e.target.classList.contains('faq-question')) {
+            const answer = e.target.nextElementSibling;
+            const icon = e.target.querySelector('svg');
 
-          answer.classList.toggle('hidden');
-          icon.style.transform = answer.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(45deg)';
-        }
+            answer.classList.toggle('hidden');
+            icon.style.transform = answer.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(45deg)';
+          }
+        });
       });
-    });
-  </script>
+    </script>
 </body>
 
 </html>
