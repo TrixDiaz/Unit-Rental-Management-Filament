@@ -133,6 +133,7 @@ class ApplicationResource extends Resource
                     ->sortable()
                     ->label('Tenant'),
                 Tables\Columns\TextColumn::make('concourse.name')
+                    ->label('Unit')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('address')
                     ->searchable()
