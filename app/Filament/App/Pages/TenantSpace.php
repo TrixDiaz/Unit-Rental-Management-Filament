@@ -183,7 +183,7 @@ class TenantSpace extends Page implements HasForms, HasTable
         $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions')
             ->withHeader('Content-Type: application/json')
             ->withHeader('accept: application/json')
-            ->withHeader('Authorization: Basic cGtfdGVzdF9KakVwNFcyUkU2blpKRGJLZmR6d1lNZ3U6')
+            ->withHeader('Authorization: Basic c2tfdGVzdF9YdThNV0VwbXZFNlZqZ0xRWHNUQkVQMlQ6')
             ->withData($data)
             ->asJson()
             ->post();
