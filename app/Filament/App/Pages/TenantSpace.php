@@ -96,6 +96,9 @@ class TenantSpace extends Page implements HasForms, HasTable
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
+                Tables\Columns\TextColumn::make('message')
+                    ->label('Issue Description')
+                    ->toggleable(isToggledHiddenByDefault: false),
             ])
             ->actions([
                 Tables\Actions\Action::make('payBills')
@@ -180,7 +183,7 @@ class TenantSpace extends Page implements HasForms, HasTable
         $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions')
             ->withHeader('Content-Type: application/json')
             ->withHeader('accept: application/json')
-            ->withHeader('Authorization: Basic c2tfdGVzdF9ZS1lMMnhaZWVRRDZjZ1dYWkJYZ1dHVU46')
+            ->withHeader('Authorization: Basic cGtfdGVzdF9KakVwNFcyUkU2blpKRGJLZmR6d1lNZ3U6')
             ->withData($data)
             ->asJson()
             ->post();

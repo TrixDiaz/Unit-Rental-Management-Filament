@@ -82,6 +82,9 @@ class ReportResource extends Resource
                             ->body("The status for report #{$record->id} has been updated.")
                             ->send();
                     }),
+                Tables\Columns\TextColumn::make('message')
+                    ->label('Issue Description')
+                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
