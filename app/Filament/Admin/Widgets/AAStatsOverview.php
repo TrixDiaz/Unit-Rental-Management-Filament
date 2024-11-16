@@ -8,6 +8,11 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class AAStatsOverview extends BaseWidget
 {
+    /**
+     * Sort
+     */
+    protected static ?int $sort = 1;
+
     protected function getStats(): array
     {
         $totalRevenue = Payment::where('payment_status', 'paid')->sum('amount');
@@ -32,6 +37,4 @@ class AAStatsOverview extends BaseWidget
                 ->color('warning'),
         ];
     }
-
-    
 }

@@ -20,6 +20,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\BillsUpdatedMail;
 
 class TenantResource extends Resource
 {
@@ -318,64 +320,67 @@ class TenantResource extends Resource
                     ->color('primary')
                     ->requiresConfirmation()
                     ->action(function (Tenant $record) {
-                        if ($record->lease_due) {
-                            $leaseDate = \Carbon\Carbon::parse($record->lease_due);
-                            $today = \Carbon\Carbon::today();
+                        $rentAmount = $record->unit->price ?? 0;
+                        $bills = $record->bills ?? [];
+                        
+                        // Convert lease_due to Carbon instance
+                        $leaseDue = Carbon::parse($record->lease_due);
 
-                            if ($today->lte($leaseDate)) {
-                                Notification::make()
-                                    ->title('No Update Needed')
-                                    ->info()
-                                    ->body('It\'s too early to update the bills for this tenant.')
-                                    ->send();
-                                return;
-                            }
+                        $billExists = collect($bills)->contains(function ($bill) use ($leaseDue) {
+                            return isset($bill['name']) && $bill['name'] == 'Monthly Rent' &&
+                                isset($bill['for_month']) && $bill['for_month'] == $leaseDue->format('Y-m');
+                        });
 
-                            $rentAmount = $record->unit->price ?? 0;
-                            $bills = $record->bills ?? [];
+                        if (!$billExists) {
+                            $bills[] = [
+                                'name' => 'Monthly Rent',
+                                'amount' => $rentAmount,
+                                'due_date' => $leaseDue->toDateString(),
+                                'for_month' => $leaseDue->format('Y-m'),
+                            ];
 
-                            $billExists = collect($bills)->contains(function ($bill) use ($leaseDate) {
-                                return isset($bill['name']) && $bill['name'] == 'Monthly Rent' &&
-                                    isset($bill['for_month']) && $bill['for_month'] == $leaseDate->format('Y-m');
-                            });
+                            $record->bills = $bills;
+                            $record->monthly_payment = $rentAmount;
+                            $record->lease_status = 'due';
+                            $record->payment_status = 'unpaid';
+                            $record->save();
 
-                            if (!$billExists) {
-                                $bills[] = [
-                                    'name' => 'Monthly Rent',
-                                    'amount' => $rentAmount,
-                                    'due_date' => $leaseDate->toDateString(),
-                                    'for_month' => $leaseDate->format('Y-m'),
-                                ];
+                            // Send notification to admin
+                            Notification::make()
+                                ->title('Bills Updated')
+                                ->success()
+                                ->send();
 
-                                $record->bills = $bills;
-                                $record->monthly_payment = $rentAmount;
-                                $record->lease_status = 'due';
-                                $record->payment_status = 'unpaid';
-                                $record->save();
-
-                                Notification::make()
-                                    ->title('Bills Updated')
-                                    ->success()
-                                    ->send();
-
-                                $user = User::find($record->tenant_id);
+                            // Send notification to tenant
+                            $tenant = User::find($record->tenant_id);
+                            if ($tenant) {
                                 Notification::make()
                                     ->title('Bills Updated')
                                     ->body('The bills for your lease period have been updated.')
                                     ->success()
-                                    ->sendToDatabase($user);
-                            } else {
+                                    ->sendToDatabase($tenant);
+
+                                // Send email to tenant
+                                Mail::to($tenant->email)->send(new BillsUpdatedMail($record));
+                            }
+
+                            // Send notification to admin (User ID 1)
+                            $admin = User::find(1);
+                            if ($admin) {
                                 Notification::make()
-                                    ->title('No Update Needed')
-                                    ->info()
-                                    ->body('The bill for this lease period already exists.')
-                                    ->send();
+                                    ->title('Bills Updated')
+                                    ->body("Bills have been updated for tenant: {$tenant->name}")
+                                    ->success()
+                                    ->sendToDatabase($admin);
+
+                                // Send email to admin
+                                Mail::to($admin->email)->send(new BillsUpdatedMail($record));
                             }
                         } else {
                             Notification::make()
-                                ->title('Error')
-                                ->danger()
-                                ->body('Lease due date is not set for this tenant.')
+                                ->title('No Update Needed')
+                                ->info()
+                                ->body('The bill for this lease period already exists.')
                                 ->send();
                         }
                     }),

@@ -43,6 +43,7 @@ final class ReportForm
                     Forms\Components\Textarea::make('message')
                         ->label('Message')
                         ->required()
+                        ->maxLength(36)
                         ->columnSpanFull(),
                 ])->columns(2),
         ];

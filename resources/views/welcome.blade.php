@@ -89,18 +89,18 @@
           Rentify is a comprehensive platform that connects landlords and tenants, making it easier to find, rent, and manage apartment units. We are committed to providing a seamless experience for both landlords and tenants, ensuring that everyone can find the perfect place to call home.
         </p>
 
-       
-          <div class='flex justify-center items-center border border-black rounded-md w-ful sm:w-auto mt-4'>
-            <a href="{{ route('filament.app.auth.login') }}">
-              <button class='w-full sm:w-auto bg-blue-100 hover:bg-blue-200 flex items-center transition-all font-semibold rounded-md px-4 sm:px-5 py-2 sm:py-3'>
-                Get started
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-[14px] fill-current ml-2" viewBox="0 0 492.004 492.004">
-                  <path
-                    d="M484.14 226.886 306.46 49.202c-5.072-5.072-11.832-7.856-19.04-7.856-7.216 0-13.972 2.788-19.044 7.856l-16.132 16.136c-5.068 5.064-7.86 11.828-7.86 19.04 0 7.208 2.792 14.2 7.86 19.264L355.9 207.526H26.58C11.732 207.526 0 219.15 0 234.002v22.812c0 14.852 11.732 27.648 26.58 27.648h330.496L252.248 388.926c-5.068 5.072-7.86 11.652-7.86 18.864 0 7.204 2.792 13.88 7.86 18.948l16.132 16.084c5.072 5.072 11.828 7.836 19.044 7.836 7.208 0 13.968-2.8 19.04-7.872l177.68-177.68c5.084-5.088 7.88-11.88 7.86-19.1.016-7.244-2.776-14.04-7.864-19.12z"
-                    data-original="#000000" />
-                </svg>
-              </button>
-            </a>
+
+        <div class='flex justify-center items-center border border-black rounded-md w-ful sm:w-auto mt-4'>
+          <a href="{{ route('filament.app.auth.login') }}">
+            <button class='w-full sm:w-auto bg-blue-100 hover:bg-blue-200 flex items-center transition-all font-semibold rounded-md px-4 sm:px-5 py-2 sm:py-3'>
+              Get started
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-[14px] fill-current ml-2" viewBox="0 0 492.004 492.004">
+                <path
+                  d="M484.14 226.886 306.46 49.202c-5.072-5.072-11.832-7.856-19.04-7.856-7.216 0-13.972 2.788-19.044 7.856l-16.132 16.136c-5.068 5.064-7.86 11.828-7.86 19.04 0 7.208 2.792 14.2 7.86 19.264L355.9 207.526H26.58C11.732 207.526 0 219.15 0 234.002v22.812c0 14.852 11.732 27.648 26.58 27.648h330.496L252.248 388.926c-5.068 5.072-7.86 11.652-7.86 18.864 0 7.204 2.792 13.88 7.86 18.948l16.132 16.084c5.072 5.072 11.828 7.836 19.044 7.836 7.208 0 13.968-2.8 19.04-7.872l177.68-177.68c5.084-5.088 7.88-11.88 7.86-19.1.016-7.244-2.776-14.04-7.864-19.12z"
+                  data-original="#000000" />
+              </svg>
+            </button>
+          </a>
         </div>
       </div>
     </div>
@@ -111,7 +111,7 @@
       <div class="max-w-7xl w-full mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-6 sm:gap-10">
           <div class="w-full h-48 sm:h-64 md:h-full">
-            <img src="https://i.postimg.cc/gkR858Z5/FOR-RENT.jpg" alt="Premium Benefits" class="w-full h-full object-cover rounded-lg" />
+            <img src="images/first-pic.png" alt="Premium Benefits" class="w-full h-full object-cover rounded-lg" />
           </div>
           <div>
             <h2 class="text-2xl sm:text-3xl md:text-4xl font-semibold mb-4 sm:mb-6">Simplify Apartment Management with Rentify</h2>
@@ -171,19 +171,8 @@
         </div>
         <div class="divide-y" x-data="{ activeIndex: null }">
           <div class="py-4">
-            <button @click="activeIndex = activeIndex === 0 ? null : 0" class="w-full text-left font-semibold flex items-center justify-between">
-              <span>How do I pay my rent?</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transform transition-transform duration-200" :class="{ 'rotate-45': activeIndex === 0 }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-              </svg>
-            </button>
-            <div x-show="activeIndex === 0" x-collapse>
-              <p class="mt-2">Rent can be paid online through our system, by check or money order to the landlord, Details and payment options are available in your dashboard.</p>
-            </div>
-          </div>
-          <div class="py-4">
             <button @click="activeIndex = activeIndex === 1 ? null : 1" class="w-full text-left font-semibold flex items-center justify-between">
-              <span>What is the process for maintenance requests?</span>
+              <span>How do I pay my rent?</span>
               <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transform transition-transform duration-200" :class="{ 'rotate-45': activeIndex === 1 }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
               </svg>
@@ -192,39 +181,53 @@
               <p class="mt-2">You can submit maintenance requests online through the system or by calling the landlord. For emergency repairs (e.g., plumbing issues, electrical problems), please contact the emergency maintenance number immediately.</p>
             </div>
           </div>
+
           <div class="py-4">
-            <button @click="activeIndex = activeIndex === 0 ? null : 0" class="w-full text-left font-semibold flex items-center justify-between">
-              <span>What is the policy for renewing my lease?</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transform transition-transform duration-200" :class="{ 'rotate-45': activeIndex === 0 }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button @click="activeIndex = activeIndex === 2 ? null : 2" class="w-full text-left font-semibold flex items-center justify-between">
+              <span>What is the process for maintenance requests?</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transform transition-transform duration-200" :class="{ 'rotate-45': activeIndex === 2 }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
               </svg>
             </button>
-            <div x-show="activeIndex === 0" x-collapse>
+            <div x-show="activeIndex === 2" x-collapse>
+              <p class="mt-2">You can submit, request, report maintenance requests through the system in the payment tab. For emergency repairs (e.g., plumbing issues, electrical problems), please report issues.</p>
+            </div>
+          </div>
+
+          <div class="py-4">
+            <button @click="activeIndex = activeIndex === 3 ? null : 3" class="w-full text-left font-semibold flex items-center justify-between">
+              <span>What is the policy for renewing my lease?</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transform transition-transform duration-200" :class="{ 'rotate-45': activeIndex === 3 }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+            </button>
+            <div x-show="activeIndex === 3" x-collapse>
               <p class="mt-2">You may also contact the landlord through ,calling or messaging.</p>
             </div>
           </div>
+
           <div class="py-4">
-            <button @click="activeIndex = activeIndex === 0 ? null : 0" class="w-full text-left font-semibold flex items-center justify-between">
+            <button @click="activeIndex = activeIndex === 4 ? null : 4" class="w-full text-left font-semibold flex items-center justify-between">
               <span>Can i have pets in my apartment?</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transform transition-transform duration-200" :class="{ 'rotate-45': activeIndex === 0 }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transform transition-transform duration-200" :class="{ 'rotate-45': activeIndex === 4 }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
               </svg>
             </button>
-            <div x-show="activeIndex === 0" x-collapse>
+            <div x-show="activeIndex === 4" x-collapse>
               <p class="mt-2">Yes, we are a pet-friendly community. However, there are certain breed size restrictions.
                 Please inform the landlord or contact the landlord for more details. </p>
             </div>
           </div>
+
           <div class="py-4">
-            <button @click="activeIndex = activeIndex === 0 ? null : 0" class="w-full text-left font-semibold flex items-center justify-between">
-              <span>how do i report a noise complaint or other disturbances?</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transform transition-transform duration-200" :class="{ 'rotate-45': activeIndex === 0 }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button @click="activeIndex = activeIndex === 5 ? null : 5" class="w-full text-left font-semibold flex items-center justify-between">
+              <span>Is this website available in mobile devices?</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transform transition-transform duration-200" :class="{ 'rotate-45': activeIndex === 5 }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
               </svg>
             </button>
-            <div x-show="activeIndex === 0" x-collapse>
+            <div x-show="activeIndex === 5" x-collapse>
               <p class="mt-2">If you need to terminate your lease early, please contact the landlord as soon as possible. </p>
-              <!-- Add more FAQ items following the same pattern -->
             </div>
           </div>
         </div>

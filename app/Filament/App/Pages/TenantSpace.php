@@ -35,7 +35,7 @@ class TenantSpace extends Page implements HasForms, HasTable
     // }
 
     protected static ?string $title = 'Payments';
-    
+
     protected static ?string $navigationIcon = 'heroicon-o-home-modern';
 
     protected static string $view = 'filament.app.pages.tenant-space';
@@ -96,9 +96,6 @@ class TenantSpace extends Page implements HasForms, HasTable
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
-                Tables\Columns\TextColumn::make('message')
-                    ->label('Issue Description')
-                    ->toggleable(isToggledHiddenByDefault: false),
             ])
             ->actions([
                 Tables\Actions\Action::make('payBills')
@@ -122,7 +119,7 @@ class TenantSpace extends Page implements HasForms, HasTable
                             'phone' => $data['phone'],
                             'issue_type' => $data['issue_type'],
                             'message' => $data['message'],
-                            'status' => 'pending',
+                            'status' => 'under maintenance',
                         ]);
 
                         Notification::make()
@@ -166,19 +163,33 @@ class TenantSpace extends Page implements HasForms, HasTable
                 'quantity' => 1,
             ];
         }
-
+        // Get authenticated user details
+        $user = auth()->user();
         $data = [
             'data' => [
                 'attributes' => [
                     'line_items' => $lineItems,
                     'amount_total' => $total * 100,
-                    'payment_method_types' => ['gcash','paymaya'],
+                    'payment_method_types' => ['gcash', 'paymaya'],
                     'success_url' => route('filament.app.pages.tenant-space.payment-success', ['record' => $record->id]),
                     'cancel_url' => route('filament.app.pages.tenant-space.payment-cancel'),
                     'description' => 'Payment for monthly rent',
+                    'customer' => [
+                        'name' => $user->name,
+                        'email' => $user->email,
+                        'phone' => $user->phone,
+                    ],
+                    'billing' => [
+                        'name' => $user->name,
+                        'email' => $user->email,
+                        'phone' => $user->phone,
+                    ],
                 ],
             ],
         ];
+
+        // Store payment data in session
+        session(['payment_data' => $data]);
 
         $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions')
             ->withHeader('Content-Type: application/json')
@@ -211,10 +222,15 @@ class TenantSpace extends Page implements HasForms, HasTable
 
     protected function sendPaymentConfirmationEmail($tenant)
     {
+        $tenant = $tenant->load('tenant');
         $user = $tenant->tenant;
-
+        $admin = \App\Models\User::find(1);
         if ($user) {
-            Mail::to($user->email)->send(new PaymentConfirmation($tenant, $user));
+            // Send to tenant
+            Mail::to($user->email, $admin->email)
+                ->send(new PaymentConfirmation($tenant, $user));
+        } else {
+            $this->notify('warning', 'Email Not Sent', 'Could not send confirmation email due to missing user information.');
         }
     }
 
@@ -222,14 +238,14 @@ class TenantSpace extends Page implements HasForms, HasTable
     {
         $tenant = Tenant::findOrFail($recordId);
 
-        // $this->sendPaymentConfirmationEmail($tenant);
+        $this->sendPaymentConfirmationEmail($tenant);
 
         $billsBeforePayment = $tenant->bills; // Store the bills before clearing them
         $amountPaid = $tenant->monthly_payment; // Store the amount paid
 
         $tenant->bills = [];
         $tenant->monthly_payment = 0;
-        $tenant->payment_status = 'Paid';
+        $tenant->payment_status = 'paid';
         $tenant->save();
 
         // Create a new Payment record with bills information
@@ -238,9 +254,9 @@ class TenantSpace extends Page implements HasForms, HasTable
             'unit_number' => $tenant->unit->unit_number,
             'amount' => $amountPaid,
             'payment_type' => 'Monthly Rent',
-            'payment_details' => json_encode($billsBeforePayment), // Use the stored bills
+            'payment_details' => json_encode($billsBeforePayment),
             'payment_method' => 'GCash',
-            'payment_status' => 'Completed',
+            'payment_status' => 'paid',
         ]);
 
         $this->notify('success', 'Payment Successful', 'Your payment has been processed successfully.');

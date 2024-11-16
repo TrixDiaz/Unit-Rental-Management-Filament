@@ -21,7 +21,7 @@ class PaymentConfirmation extends Mailable
      */
     public function __construct(Tenant $tenant, User $user)
     {
-        $this->tenant = $tenant;
+        $this->tenant = $tenant->load('tenant');
         $this->user = $user;
     }
 

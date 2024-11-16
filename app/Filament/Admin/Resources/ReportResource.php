@@ -19,7 +19,7 @@ use Filament\Tables\Actions\EditAction;
 class ReportResource extends Resource
 {
     protected static ?string $navigationGroup = 'Other';
-    
+
     protected static ?string $model = Report::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-exclamation-circle';
@@ -71,9 +71,12 @@ class ReportResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('issue_type')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('message')
+                    ->label('Issue Description')
+                    ->toggleable(isToggledHiddenByDefault: false),
                 SelectColumn::make('status')
                     ->options([
-                        'pending' => 'Pending',
+                        'under maintenance' => 'Under Maintenance',
                         'resolved' => 'Resolved',
                     ])
                     ->afterStateUpdated(function ($record) {
@@ -82,9 +85,6 @@ class ReportResource extends Resource
                             ->body("The status for report #{$record->id} has been updated.")
                             ->send();
                     }),
-                Tables\Columns\TextColumn::make('message')
-                    ->label('Issue Description')
-                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()

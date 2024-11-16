@@ -3,6 +3,10 @@
 namespace App\Filament\Admin\Widgets;
 
 use App\Models\Payment;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
 class ABMonthlyRevenue extends ApexChartWidget
@@ -13,6 +17,16 @@ class ABMonthlyRevenue extends ApexChartWidget
      * @var string
      */
     protected static ?string $chartId = 'aBMonthlyRevenue';
+
+    /**
+     * Sort
+     */
+    protected static ?int $sort = 2;
+
+    /**
+     * Widget content height
+     */
+    protected static ?int $contentHeight = 275;
 
     /**
      * Widget Title
@@ -27,54 +41,149 @@ class ABMonthlyRevenue extends ApexChartWidget
      *
      * @return array
      */
+    /**
+     * Filter Form
+     */
+    protected function getFormSchema(): array
+    {
+        return [
+
+            Radio::make('ordersChartType')
+                ->default('bar')
+                ->options([
+                    'line' => 'Line',
+                    'bar' => 'Col',
+                    'area' => 'Area',
+                ])
+                ->inline(true)
+                ->label('Type'),
+
+            Grid::make()
+                ->schema([
+                    Toggle::make('ordersChartMarkers')
+                        ->default(false)
+                        ->label('Markers'),
+
+                    Toggle::make('ordersChartGrid')
+                        ->default(false)
+                        ->label('Grid'),
+                ]),
+
+            TextInput::make('ordersChartAnnotations')
+                ->required()
+                ->numeric()
+                ->default(7500)
+                ->label('Annotations'),
+        ];
+    }
+
+    /**
+     * Chart options (series, labels, types, size, animations...)
+     * https://apexcharts.com/docs/options
+     */
     protected function getOptions(): array
     {
-        // Get the monthly data dynamically from the database
-        $monthlyData = Payment::selectRaw('SUM(amount) as total_income, MONTH(created_at) as month')
+        $filters = $this->filterFormData;
+        
+        // Get payments grouped by month and sum amounts
+        $monthlyPayments = Payment::selectRaw('MONTH(created_at) as month, SUM(amount) as total')
             ->whereYear('created_at', now()->year)
             ->groupBy('month')
             ->orderBy('month')
-            ->get();
+            ->pluck('total', 'month')
+            ->toArray();
+        
+        // Initialize array with zeros for all months
+        $monthlyData = array_fill(1, 12, 0);
+        
+        // Fill in actual payment data
+        foreach ($monthlyPayments as $month => $total) {
+            $monthlyData[$month] = $total;
+        }
 
-        // Sort data by month to ensure labels are in the correct order
-        $monthlyData = $monthlyData->sortBy('month');
-
-        $datasets = [
-            [
-                'name' => 'Earning',
-                'data' => $monthlyData->pluck('total_income')->toArray(),
-                'type' => 'column',
-            ],
-            // If you have expenses data, you can include another dataset here
-        ];
-
-        $labels = $monthlyData->pluck('month')->map(function ($month) {
-            return date('M', mktime(0, 0, 0, $month, 1));
-        })->toArray();
-
-        // Ensure the labels start from January regardless of the data
-        $orderedLabels = [
-            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-        ];
-
-        $labels = array_intersect($orderedLabels, $labels);
-
-         // Now merge the datasets and labels with the rest of the chart options
-         return [
+        return [
             'chart' => [
-                'type' => 'bar', // Assuming you want a bar chart
-                'height' => 300,
+                'type' => $filters['ordersChartType'],
+                'height' => 250,
+                'toolbar' => [
+                    'show' => false,
+                ],
             ],
-            'series' => $datasets,
+            'series' => [
+                [
+                    'name' => 'Monthly Revenue',
+                    'data' => array_values($monthlyData), // Use the dynamic data
+                ],
+            ],
+            'plotOptions' => [
+                'bar' => [
+                    'borderRadius' => 2,
+                ],
+            ],
             'xaxis' => [
-                'categories' => $labels,
+                'categories' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                 'labels' => [
                     'style' => [
-                        'fontFamily' => 'poppins',
+                        'fontWeight' => 400,
+                        'fontFamily' => 'inherit',
                     ],
                 ],
             ],
-            // ... [rest of the options]
+            'yaxis' => [
+                'labels' => [
+                    'style' => [
+                        'fontWeight' => 400,
+                        'fontFamily' => 'inherit',
+                    ],
+                ],
+            ],
+            'fill' => [
+                'type' => 'gradient',
+                'gradient' => [
+                    'shade' => 'dark',
+                    'type' => 'vertical',
+                    'shadeIntensity' => 0.5,
+                    'gradientToColors' => ['#fbbf24'],
+                    'inverseColors' => true,
+                    'opacityFrom' => 1,
+                    'opacityTo' => 1,
+                    'stops' => [0, 100],
+                ],
+            ],
+
+            'dataLabels' => [
+                'enabled' => false,
+            ],
+            'grid' => [
+                'show' => $filters['ordersChartGrid'],
+            ],
+            'markers' => [
+                'size' => $filters['ordersChartMarkers'] ? 3 : 0,
+            ],
+            'tooltip' => [
+                'enabled' => true,
+            ],
+            'stroke' => [
+                'width' => $filters['ordersChartType'] === 'line' ? 4 : 0,
+            ],
+            'colors' => ['#f59e0b'],
+            'annotations' => [
+                'yaxis' => [
+                    [
+                        'y' => $filters['ordersChartAnnotations'],
+                        'borderColor' => '#ef4444',
+                        'borderWidth' => 1,
+                        'label' => [
+                            'borderColor' => '#ef4444',
+                            'style' => [
+                                'color' => '#fffbeb',
+                                'background' => '#ef4444',
+                            ],
+                            'text' => 'Annotation: ' . $filters['ordersChartAnnotations'],
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 }

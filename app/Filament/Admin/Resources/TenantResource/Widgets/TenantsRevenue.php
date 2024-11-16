@@ -29,7 +29,7 @@ class TenantsRevenue extends BaseWidget
         return [
             Stat::make('Total Tenants', $totalTenants),
             Stat::make('Tenants with Bills to Pay', $tenantsWithBills),
-            Stat::make('Total Bills Amount', '₱' . number_format($totalBillsAmount, 2)),
+            Stat::make('Total Bills to Pay', '₱' . number_format($totalBillsAmount, 2)),
         ];
     }
 }

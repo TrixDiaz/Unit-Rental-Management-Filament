@@ -14,6 +14,16 @@ class ACYearlyRevenue extends ApexChartWidget
      */
     protected static ?string $chartId = 'aCYearlyRevenue';
 
+     /**
+     * Sort
+     */
+    protected static ?int $sort = 3;
+
+    /**
+     * Widget content height
+     */
+    protected static ?int $contentHeight = 275;
+
     /**
      * Widget Title
      *
