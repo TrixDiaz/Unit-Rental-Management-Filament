@@ -178,7 +178,8 @@
               </svg>
             </button>
             <div x-show="activeIndex === 1" x-collapse>
-              <p class="mt-2">You can submit maintenance requests online through the system or by calling the landlord. For emergency repairs (e.g., plumbing issues, electrical problems), please contact the emergency maintenance number immediately.</p>
+              <p class="mt-2">Rent can be paid online through our system, by check or money order to the landlord, Details and payment options are available in your dashboard.</p>
+
             </div>
           </div>
 
@@ -190,7 +191,7 @@
               </svg>
             </button>
             <div x-show="activeIndex === 2" x-collapse>
-              <p class="mt-2">You can submit, request, report maintenance requests through the system in the payment tab. For emergency repairs (e.g., plumbing issues, electrical problems), please report issues.</p>
+              <p class="mt-2">You can submit maintenance requests online through the system or by calling the landlord. For emergency repairs (e.g., plumbing issues, electrical problems), please contact the emergency maintenance number immediately.</p>
             </div>
           </div>
 
@@ -216,6 +217,7 @@
             <div x-show="activeIndex === 4" x-collapse>
               <p class="mt-2">Yes, we are a pet-friendly community. However, there are certain breed size restrictions.
                 Please inform the landlord or contact the landlord for more details. </p>
+
             </div>
           </div>
 
