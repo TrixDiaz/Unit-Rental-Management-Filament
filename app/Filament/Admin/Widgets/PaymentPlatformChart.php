@@ -5,16 +5,16 @@ namespace App\Filament\Admin\Widgets;
 use App\Models\Payment;
 use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
-class ACYearlyRevenue extends ApexChartWidget
+class PaymentPlatformChart extends ApexChartWidget
 {
     /**
      * Chart Id
      *
      * @var string
      */
-    protected static ?string $chartId = 'aCYearlyRevenue';
+    protected static ?string $chartId = 'paymentPlatformChart';
 
-     /**
+      /**
      * Sort
      */
     protected static ?int $sort = 3;
@@ -39,26 +39,23 @@ class ACYearlyRevenue extends ApexChartWidget
      */
     protected function getOptions(): array
     {
-        // Get payment data dynamically from the database
-        $paymentData = Payment::selectRaw('COUNT(*) as count, payment_method')
-            ->groupBy('payment_method')
-            ->whereIn('payment_method', ['maya', 'gcash']) // Adjust the payment options as needed
-            ->get();
+        $maya  = Payment::where('payment_method', 'paymaya')->sum('amount');
+        $gcash = Payment::where('payment_method', 'gcash')->sum('amount');
+        $total = $maya + $gcash;
+        $mayaPercentage = $total > 0 ? round(($maya / $total) * 100, 2) : 0;
+        $gcashPercentage = $total > 0 ? round(($gcash / $total) * 100, 2) : 0;
 
-        $datasets = $paymentData->pluck('count')->toArray();
-        $labels = $paymentData->pluck('payment_method')->toArray();
-
-        // Now merge the datasets and labels with the rest of the chart options
         return [
             'chart' => [
-                'type' => 'donut',
+                'type' => 'pie',
                 'height' => 300,
             ],
-            'series' => $datasets,
-            'labels' => $labels,
+            'series' => [$gcashPercentage, $mayaPercentage],
+            'labels' => ['Gcash', 'PayMaya'],
+            'colors' => ['#0000FF', '#FF0000'],
             'legend' => [
                 'labels' => [
-                    'fontFamily' => 'poppins',
+                    'fontFamily' => 'inherit',
                 ],
             ],
         ];

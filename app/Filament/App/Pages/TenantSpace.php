@@ -255,7 +255,7 @@ class TenantSpace extends Page implements HasForms, HasTable
             'amount' => $amountPaid,
             'payment_type' => 'Monthly Rent',
             'payment_details' => json_encode($billsBeforePayment),
-            'payment_method' => 'GCash',
+            'payment_method' => session('payment_data.data.attributes.payment_method_types')[0],
             'payment_status' => 'paid',
         ]);
 
