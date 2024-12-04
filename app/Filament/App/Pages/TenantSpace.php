@@ -224,13 +224,23 @@ class TenantSpace extends Page implements HasForms, HasTable
     {
         $tenant = $tenant->load('tenant');
         $user = $tenant->tenant;
-        $admin = \App\Models\User::find(1);
-        if ($user) {
+        // Get admin from configuration or use a more reliable method
+        $admin = \App\Models\User::where('is_admin', true)->first();
+
+        if ($user && $admin) {
             // Send to tenant
-            Mail::to($user->email, $admin->email)
+            Notification::make()
+                ->title('Payment Confirmation Email Sent')
+                ->body('The payment confirmation email has been sent to the tenant.')
+                ->success()
+                ->sendToDatabase($admin);
+
+            // Correct syntax for sending to multiple recipients
+            Mail::to([$user->email])
+                ->cc([$admin->email])
                 ->send(new PaymentConfirmation($tenant, $user));
         } else {
-            $this->notify('warning', 'Email Not Sent', 'Could not send confirmation email due to missing user information.');
+            $this->notify('warning', 'Email Not Sent', 'Could not send confirmation email due to missing user or admin information.');
         }
     }
 
