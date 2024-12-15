@@ -232,6 +232,16 @@ class UnitResource extends Resource
                     ->money('PHP')
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->extraAttributes(['class' => 'capitalize'])
+                    ->color(fn($record) => match ($record->status) {
+                        'available' => 'success',
+                        'occupied' => 'danger',
+                        'under_maintenance' => 'warning',
+                        'under_renovation' => 'info',
+                    })
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

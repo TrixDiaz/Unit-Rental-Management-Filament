@@ -72,10 +72,6 @@ class ApplicationResource extends Resource
                             ])
                             ->native(false)
                             ->extraInputAttributes(['class' => 'capitalize']),
-                        Forms\Components\Textarea::make('remarks')
-                            ->maxLength(255)
-                            ->default(null)
-                            ->columnSpanFull(),
                     ])->columns(3),
                 Forms\Components\Section::make('List of Required Documents')
                     ->description('Approved each documents for the application')
@@ -122,6 +118,15 @@ class ApplicationResource extends Resource
                             ->disableItemDeletion(),
                     ])->columnSpanFull(),
 
+                Forms\Components\Card::make()
+                    ->schema([
+                        Forms\Components\Textarea::make('remarks')
+                            ->maxLength(255)
+                            ->default(null)
+                            ->columnSpanFull(),
+                    ])
+                    ->columnSpanFull(),
+
             ]);
     }
 
@@ -132,7 +137,7 @@ class ApplicationResource extends Resource
                 Tables\Columns\TextColumn::make('user.name')
                     ->sortable()
                     ->label('Tenant'),
-                Tables\Columns\TextColumn::make('concourse.name')
+                Tables\Columns\TextColumn::make('unit.name')
                     ->label('Unit')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('address')

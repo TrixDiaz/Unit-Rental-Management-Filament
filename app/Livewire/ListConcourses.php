@@ -58,9 +58,15 @@ class ListConcourses extends Component implements HasTable, HasForms
                         ->searchable(),
                     Tables\Columns\TextColumn::make('status')
                         ->badge()
-                        ->sortable()
-                        ->extraAttributes(['class' => 'capitalize']),
-                    Tables\Columns\TextColumn::make('concourseRate.price')
+                        ->extraAttributes(['class' => 'capitalize'])
+                        ->color(fn($record) => match ($record->status) {
+                            'available' => 'success',
+                            'occupied' => 'danger',
+                            'pending' => 'warning',
+                            'under_maintenance' => 'warning',
+                            'under_renovation' => 'info',
+                        }),
+                    Tables\Columns\TextColumn::make('price')
                         ->prefix('Monthly Rent ')
                         ->sortable()
                         ->money('PHP'),
@@ -132,13 +138,13 @@ class ListConcourses extends Component implements HasTable, HasForms
                         // Notify the admin
                         $this->notifyAdmin('New Application', 'A new application has been submitted.');
 
-                     // Send email to admin (User with ID 1)
-                    //  $admin = User::find(1);
-                    //  if ($admin) {
-                    //      Mail::to($admin->email)->send(new NewApplicationSubmitted($application));
-                    //  }
+                        // Send email to admin (User with ID 1)
+                        //  $admin = User::find(1);
+                        //  if ($admin) {
+                        //      Mail::to($admin->email)->send(new NewApplicationSubmitted($application));
+                        //  }
 
-                     return $application;
+                        return $application;
                     })
                     ->hidden(function ($record) {
                         if (!$record) return true; // Hide if no record (shouldn't happen, but just in case)

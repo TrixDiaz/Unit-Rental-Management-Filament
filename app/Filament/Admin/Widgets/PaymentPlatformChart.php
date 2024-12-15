@@ -14,7 +14,7 @@ class PaymentPlatformChart extends ApexChartWidget
      */
     protected static ?string $chartId = 'paymentPlatformChart';
 
-      /**
+    /**
      * Sort
      */
     protected static ?int $sort = 3;
@@ -39,19 +39,46 @@ class PaymentPlatformChart extends ApexChartWidget
      */
     protected function getOptions(): array
     {
-        $maya  = Payment::where('payment_method', 'paymaya')->sum('amount');
-        $gcash = Payment::where('payment_method', 'gcash')->sum('amount');
-        $total = $maya + $gcash;
-        $mayaPercentage = $total > 0 ? round(($maya / $total) * 100, 2) : 0;
-        $gcashPercentage = $total > 0 ? round(($gcash / $total) * 100, 2) : 0;
+        $payments = Payment::selectRaw('YEAR(created_at) as year, payment_method, SUM(amount) as total')
+            ->groupBy('year', 'payment_method')
+            ->orderBy('year')
+            ->get();
+
+        $years = $payments->pluck('year')->unique()->values();
+        $maya = [];
+        $gcash = [];
+
+        foreach ($years as $year) {
+            $mayaTotal = $payments->where('year', $year)
+                ->where('payment_method', 'paymaya')
+                ->first()?->total ?? 0;
+
+            $gcashTotal = $payments->where('year', $year)
+                ->where('payment_method', 'gcash')
+                ->first()?->total ?? 0;
+
+            $maya[] = $mayaTotal;
+            $gcash[] = $gcashTotal;
+        }
 
         return [
             'chart' => [
-                'type' => 'pie',
+                'type' => 'bar',
                 'height' => 300,
             ],
-            'series' => [$gcashPercentage, $mayaPercentage],
-            'labels' => ['Gcash', 'PayMaya'],
+            'series' => [
+                [
+                    'name' => 'Gcash',
+                    'data' => $gcash,
+                ],
+                [
+                    'name' => 'PayMaya',
+                    'data' => $maya,
+                ],
+            ],
+            'xaxis' => [
+                'categories' => $years->toArray(),
+            ],
             'colors' => ['#0000FF', '#FF0000'],
             'legend' => [
                 'labels' => [
