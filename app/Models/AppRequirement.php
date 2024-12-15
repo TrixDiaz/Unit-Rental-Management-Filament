@@ -17,6 +17,7 @@ class AppRequirement extends Model
         'application_id',
         'name',
         'status',
+        'remarks',
         'file',
     ];
 

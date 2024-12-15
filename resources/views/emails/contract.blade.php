@@ -1,64 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
+@component('mail::message')
+# Rental Contract
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rental Contract</title>
-</head>
+Dear {{ $user->name }},
 
-<body>
-    <h1>Rental Contract</h1>
+We are pleased to inform you that your application for renting a unit has been approved.
 
-    <p>Dear {{ $user->name }},</p>
+## Unit Details:
+- **Unit Name:** {{ $concourse->name ?? 'N/A' }}
+- **Monthly Rent:** ₱{{ number_format($monthlyPayment ?? 0, 2) }}
+- **Lease Start Date:** {{ $leaseStart ? $leaseStart->format('F d, Y') : 'N/A' }}
+- **Lease End Date:** {{ $leaseEnd ? $leaseEnd->format('F d, Y') : 'N/A' }}
+- **Lease Term:** {{ $leaseTerm ?? 'N/A' }} months
 
-    <p>We are pleased to inform you that your application for renting a unit has been approved.</p>
+## Additional Charges:
+@if(is_array($bills) && count($bills) > 0)
+@foreach($bills as $bill => $amount)
+- **{{ ucfirst($bill) }}:** ₱{{ number_format($amount, 2) }}
+@endforeach
+@else
+No additional charges.
+@endif
 
-    <h2>Unit Details:</h2>
-    <ul style="list-style-type: none; padding-left: 0;">
-        <li><strong>Unit Name:</strong> {{ $unit->name ?? 'N/A' }}</li>
-        <li><strong>Monthly Rent:</strong> ₱{{ number_format($monthlyPayment ?? 0, 2) }}</li>
-        <li><strong>Lease Start Date:</strong> {{ $leaseStart ? $leaseStart->format('F d, Y') : 'N/A' }}</li>
-        <li><strong>Lease End Date:</strong> {{ $leaseEnd ? $leaseEnd->format('F d, Y') : 'N/A' }}</li>
-        <li><strong>Lease Term:</strong> {{ $leaseTerm ?? 'N/A' }} months</li>
-    </ul>
+## Unit Amenities:
+@if(isset($unit->amenities) && is_array($unit->amenities) && count($unit->amenities) > 0)
+@foreach($unit->amenities as $amenity)
+- {{ $amenity }}
+@endforeach
+@else
+No amenities listed.
+@endif
 
-    <h2>Additional Charges:</h2>
-    @if(is_array($bills) && count($bills) > 0)
-    <ul style="list-style-type: none; padding-left: 0;">
-        @foreach($bills as $bill => $amount)
-        <li><strong>{{ ucfirst($bill) }}:</strong> ₱{{ number_format($amount, 2) }}</li>
-        @endforeach
-    </ul>
-    @else
-    <p>No additional charges.</p>
-    @endif
+## Terms and Conditions:
+1. The tenant agrees to pay the monthly rent of ₱{{ number_format($monthlyPayment ?? 0, 2) }} on or before the 1st day of each month.
+2. The lease term is for {{ $leaseTerm ?? 'N/A' }} months, starting from {{ $leaseStart ? $leaseStart->format('F d, Y') : 'N/A' }} to {{ $leaseEnd ? $leaseEnd->format('F d, Y') : 'N/A' }}.
+3. The tenant is responsible for paying the additional charges as listed above.
+4. The tenant agrees to abide by all rules and regulations of the Unit.
+5. Any damages to the unit beyond normal wear and tear will be the responsibility of the tenant.
 
-    <h2>Unit Amenities:</h2>
-    @if(isset($unit->amenities) && is_array($unit->amenities) && count($unit->amenities) > 0)
-    <ul style="list-style-type: none; padding-left: 0;">
-        @foreach($unit->amenities as $amenity)
-        <li>{{ $amenity }}</li>
-        @endforeach
-    </ul>
-    @else
-    <p>No amenities listed.</p>
-    @endif
+Please review the terms and conditions carefully. If you have any questions or concerns, please don't hesitate to contact us.
 
-    <h2>Terms and Conditions:</h2>
-    <p>1. The tenant agrees to pay the monthly rent of ₱{{ number_format($monthlyPayment ?? 0, 2) }} on or before the 1st day of each month.</p>
-    <p>2. The lease term is for {{ $leaseTerm ?? 'N/A' }} months, starting from {{ $leaseStart ? $leaseStart->format('F d, Y') : 'N/A' }} to {{ $leaseEnd ? $leaseEnd->format('F d, Y') : 'N/A' }}.</p>
-    <p>3. The tenant is responsible for paying the additional charges as listed above.</p>
-    <p>4. The tenant agrees to abide by all rules and regulations of the Unit.</p>
-    <p>5. Any damages to the unit beyond normal wear and tear will be the responsibility of the tenant.</p>
+To confirm your acceptance of this contract, please reply to this email with your agreement or visit in our admin to sign the physical copy of the contract.
 
-    <p>Please review the terms and conditions carefully. If you have any questions or concerns, please don't hesitate to contact us.</p>
+Thank you for choosing our property.
 
-    <p>To confirm your acceptance of this contract, please reply to this email with your agreement or visit in our admin to sign the physical copy of the contract.</p>
+Best regards,<br>
+Rentify
 
-    <p>Thank you for choosing our property.</p>
-
-    <p>Best regards,<br>Rentify</p>
-</body>
-
-</html>
+@endcomponent

@@ -51,6 +51,9 @@ class PaymentRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('payment_status'),
                 Tables\Columns\TextColumn::make('amount')
                     ->money('PHP'),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Date of Payment')
+                    ->dateTime('F d, Y'),
             ])
             ->filters([
                 //

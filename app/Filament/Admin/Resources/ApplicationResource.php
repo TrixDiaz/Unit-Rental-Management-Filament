@@ -94,17 +94,17 @@ class ApplicationResource extends Resource
                                     'lg' => 2
                                 ]),
                                 Forms\Components\Grid::make(1)->schema([
-                                    Forms\Components\TextInput::make('name')
-                                        ->required()
-                                        ->disabled()
-                                        ->readOnly(),
                                     Forms\Components\Select::make('status')
+                                        ->label(fn($record) => $record->name)
                                         ->required()
                                         ->options([
                                             'pending' => 'Pending',
                                             'approved' => 'Approved',
                                             'rejected' => 'Rejected',
                                         ]),
+                                    Forms\Components\TextInput::make('remarks')
+                                        ->maxLength(255)
+                                        ->default(null),
                                 ])->columnSpan([
                                     'sm' => 3,
                                     'md' => 3,

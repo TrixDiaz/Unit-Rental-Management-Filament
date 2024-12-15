@@ -61,7 +61,7 @@ final class RequirementForm
                             ->directory('requirements')
                             ->acceptedFileTypes(['application/pdf', 'image/*'])
                             ->maxSize(5120) // 5MB max file size
-                            ;
+                        ;
                     })->toArray();
                 })
                 ->columns(2),

@@ -21,7 +21,9 @@ class ContractMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Your Rental Contract')
-                    ->view('emails.contract', $this->contractData);
+        return $this->subject('Rental Contract')
+            ->view('emails.contract')
+            ->with($this->contractData)
+            ->markdown('emails.contract');
     }
 }

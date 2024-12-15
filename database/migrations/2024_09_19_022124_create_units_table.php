@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('units', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('address')->nullable();  
+            $table->string('address')->nullable();
             $table->integer('unit_number')->nullable();
             $table->integer('deposit')->nullable();
             $table->integer('price')->nullable();

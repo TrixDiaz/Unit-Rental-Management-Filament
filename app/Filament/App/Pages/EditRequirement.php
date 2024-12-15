@@ -35,17 +35,28 @@ class EditRequirement extends Page implements Forms\Contracts\HasForms
             ->firstOrFail();
 
         $this->appRequirements = AppRequirement::where('application_id', $this->application->id)->get();
-
-        // Fetch all requirements for the concourse
-        // Adjust this query based on your actual database structure
         $this->allRequirements = Requirement::all();
 
-        $formData = $this->application->toArray();
+        // Initialize the form data
+        $formData = [
+            'email' => $this->application->email,
+            'phone_number' => $this->application->phone_number,
+            'lease_term' => $this->application->lease_term,
+            'address' => $this->application->address,
+            'remarks' => $this->application->remarks,
+            'requirements' => [],
+            'requirement_status' => [],
+            'remarks' => []
+        ];
+
+        // Populate requirements data
         foreach ($this->allRequirements as $requirement) {
             $appRequirement = $this->appRequirements->firstWhere('requirement_id', $requirement->id);
             $formData['requirements'][$requirement->id] = $appRequirement ? $appRequirement->file : null;
             $formData['requirement_status'][$requirement->id] = $appRequirement ? $appRequirement->status : 'pending';
+            $formData['remarks'][$requirement->id] = $appRequirement ? $appRequirement->remarks : null;
         }
+
         $this->form->fill($formData);
     }
 
@@ -81,7 +92,7 @@ class EditRequirement extends Page implements Forms\Contracts\HasForms
                             ->schema(function () {
                                 return $this->allRequirements->map(function ($requirement) {
                                     $appRequirement = $this->appRequirements->firstWhere('requirement_id', $requirement->id);
-                                    return Forms\Components\Grid::make(2)
+                                    return Forms\Components\Grid::make(3)
                                         ->schema([
                                             Forms\Components\FileUpload::make("requirements.{$requirement->id}")
                                                 ->label('')
@@ -100,6 +111,10 @@ class EditRequirement extends Page implements Forms\Contracts\HasForms
                                             Forms\Components\TextInput::make("requirement_status.{$requirement->id}")
                                                 ->label($requirement->name)
                                                 ->extraInputAttributes(['class' => 'capitalize'])
+                                                ->disabled(),
+                                            Forms\Components\Textarea::make("remarks.{$requirement->id}")
+                                                ->label('Remarks')
+                                                ->maxLength(255)
                                                 ->disabled(),
                                         ]);
                                 })->toArray();

@@ -29,7 +29,7 @@ class PaymentPlatformChart extends ApexChartWidget
      *
      * @var string|null
      */
-    protected static ?string $heading = 'Payment Platform';
+    protected static ?string $heading = 'Yearly Revenue';
 
     /**
      * Chart options (series, labels, types, size, animations...)
@@ -50,7 +50,7 @@ class PaymentPlatformChart extends ApexChartWidget
 
         foreach ($years as $year) {
             $mayaTotal = $payments->where('year', $year)
-                ->where('payment_method', 'paymaya')
+                ->where('payment_method', 'maya')
                 ->first()?->total ?? 0;
 
             $gcashTotal = $payments->where('year', $year)
