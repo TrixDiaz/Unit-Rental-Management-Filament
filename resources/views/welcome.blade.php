@@ -178,7 +178,7 @@
               </svg>
             </button>
             <div x-show="activeIndex === 1" x-collapse>
-              <p class="mt-2">Rent can be paid online through our system, by check or money order to the landlord, Details and payment options are available in your dashboard.</p>
+              <p class="mt-2">Rent can be paid online through our system, by check or money order to the landlord, Details and payment options are available in your Payment tab, you can choose what payment method you actually want to use(Maya or Gcash).</p>
 
             </div>
           </div>
@@ -191,7 +191,7 @@
               </svg>
             </button>
             <div x-show="activeIndex === 2" x-collapse>
-              <p class="mt-2">You can submit maintenance requests online through the system or by calling the landlord. For emergency repairs (e.g., plumbing issues, electrical problems), please contact the emergency maintenance number immediately.</p>
+              <p class="mt-2">You can submit, request, report maintenance requests through the system in the payment tab. For emergency repairs (e.g., plumbing issues, electrical problems), please report issues.</p>
             </div>
           </div>
 
@@ -203,7 +203,7 @@
               </svg>
             </button>
             <div x-show="activeIndex === 3" x-collapse>
-              <p class="mt-2">You may also contact the landlord through ,calling or messaging.</p>
+              <p class="mt-2">Open Units, You can look for the current unit you are renting and wait for it to be availabe, then rent it again to renew your lease.</p>
             </div>
           </div>
 
@@ -215,8 +215,7 @@
               </svg>
             </button>
             <div x-show="activeIndex === 4" x-collapse>
-              <p class="mt-2">Yes, we are a pet-friendly community. However, there are certain breed size restrictions.
-                Please inform the landlord or contact the landlord for more details. </p>
+              <p class="mt-2">Yes, we are a pet-friendly community. </p>
 
             </div>
           </div>
@@ -229,7 +228,7 @@
               </svg>
             </button>
             <div x-show="activeIndex === 5" x-collapse>
-              <p class="mt-2">If you need to terminate your lease early, please contact the landlord as soon as possible. </p>
+              <p class="mt-2">Yes it is accesscible in Mobile Devices, Open your Browser and search "Rentify.cloud" and click get started, create and account, then verify your account in email, you will be redirected to the Rentify Website and make your Apartment Renting more easier. </p>
             </div>
           </div>
         </div>
@@ -258,7 +257,20 @@
   </div> -->
 
       <!-- Footer -->
-
+       
+      <div class="mt-16">
+   <center> <h2 class="text-xl font-semibold mb-4">Our Location</h2>
+    <iframe 
+    src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3866.390377812705!2d120.9972461751002!3d14.288736286161514!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTTCsDE3JzE5LjUiTiAxMjDCsDU5JzU5LjQiRQ!5e0!3m2!1sfil!2sph!4v1733935666507!5m2!1sfil!2sph" width="800"
+      height="600"
+      style="border:0;"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade">
+      </center>
+    </iframe>
+  </div>
+</div>
 
       <footer class="bg-gray-50 mt-16 sm:mt-28">
         <div class="mx-auto grid max-w-screen-xl gap-6 sm:gap-y-8 sm:gap-x-12 px-4 py-8 sm:py-10 grid-cols-1 md:grid-cols-2 xl:grid-cols-4 xl:px-10">
